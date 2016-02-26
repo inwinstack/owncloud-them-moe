@@ -1,4 +1,4 @@
-# owncloud-them-moe
+# owncloud-theme-moe
 這是教育部儲存應用服務的主題，包含以下修正
 
 1. 將所有原 ownCloud Logo 變更為教育部 Logo
