@@ -1,0 +1,12 @@
+#header .logo-icon {
+  background-image: url(../img/header-logo-icon.png);
+  height: 35px;
+  margin-left: 15px;
+  width: 45px;
+}
+
+#header .logo {
+  background-image: url(../img/login-logo-icon.png);
+  height: 180px;
+  width: 256px;
+}
