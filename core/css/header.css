@@ -41,7 +41,7 @@
 
 /* NAVIGATION ------------------------------------------------------------  */
   #navigation {
-    width: auto;
+    width: 100%;
     background-color: transparent;
     box-shadow: none;
     border-radius: 0;
