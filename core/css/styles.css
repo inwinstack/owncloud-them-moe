@@ -1,5 +1,13 @@
+body {
+  font-size: 1em;
+}
+
 #body-login {
   background-image: url(../img/background-cyan.jpg);
+}
+
+#body-login form {
+  margin: 0px auto 32px;
 }
 
 .searchbox input[type="search"] {
@@ -11,3 +19,10 @@
   background-color: #f8f8f8;
   color: #009CBE;
 }
+
+#controls {
+  background-color: #f9f9f9;
+  height: 47px;
+  border-bottom: 1px solid #eee;
+}
+
