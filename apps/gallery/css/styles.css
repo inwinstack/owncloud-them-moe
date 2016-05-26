@@ -1,0 +1,8 @@
+#gallery .row a {
+    margin: 10px 5px 10px 10px;
+}
+
+#gallery .row a:first-child {
+    margin-left: 10px;
+}
+
