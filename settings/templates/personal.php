@@ -9,49 +9,27 @@
 
 <div id="app-navigation">
 	<ul>
-	<?php foreach($_['forms'] as $form) {
-		if (isset($form['anchor'])) {
-			$anchor = '#' . $form['anchor'];
-			$sectionName = $form['section-name'];
-			print_unescaped(sprintf("<li><a href='%s'>%s</a></li>", OC_Util::sanitizeHTML($anchor), OC_Util::sanitizeHTML($sectionName)));
-		}
-	}?>
+        <li><a href="#quota-stats"><?php p($l->t('Quota Stats')); ?></a></li>
+        <li><a href="#avatar"><?php p($l->t('Profile picture')); ?></a></li>
+        <li><a href="#goto-訊息通知"><?php p($l->t('Notifications')); ?></a></li>
+        <li><a href="#clientsbox"><?php p($l->t('Get the apps to sync your files'));?></a></li>
+        <li><a href="#terms-of-service"><?php p($l->t('Terms of service'));?></a></li>
+	
+        <?php foreach($_['forms'] as $form) {
+            if (isset($form['anchor']) and !in_array($form['anchor'], ["clientsbox", "passwordform", "goto-訊息通知"])) {
+                $anchor = '#' . $form['anchor'];
+                $sectionName = $form['section-name'];
+                print_unescaped(sprintf("<li><a href='%s'>%s</a></li>", OC_Util::sanitizeHTML($anchor), OC_Util::sanitizeHTML($sectionName)));
+            }
+        }?>
 	</ul>
 </div>
 
 <div id="app-content">
 
-<div id="clientsbox" class="clientsbox center">
-	<h2><?php p($l->t('Get the apps to sync your files'));?></h2>
-	<a href="<?php p($_['clients']['desktop']); ?>" target="_blank">
-		<img src="<?php print_unescaped(OCP\Util::imagePath('core', 'desktopapp.png')); ?>"
-			alt="<?php p($l->t('Desktop client'));?>" />
-	</a>
-	<a href="<?php p($_['clients']['android']); ?>" target="_blank">
-		<img src="<?php print_unescaped(OCP\Util::imagePath('core', 'googleplay.png')); ?>"
-			alt="<?php p($l->t('Android app'));?>" />
-	</a>
-	<a href="<?php p($_['clients']['ios']); ?>" target="_blank">
-		<img src="<?php print_unescaped(OCP\Util::imagePath('core', 'appstore.png')); ?>"
-			alt="<?php p($l->t('iOS app'));?>" />
-	</a>
-
-	<!--<?php if (OC_Util::getEditionString() === ''): ?>
-	<p class="center">
-		<?php print_unescaped($l->t('If you want to support the project
-		<a href="https://owncloud.org/contribute"
-			target="_blank" rel="noreferrer">join development</a>
-		or
-		<a href="https://owncloud.org/promote"
-			target="_blank" rel="noreferrer">spread the word</a>!'));?>
-	</p>
-	<?php endif; ?>-->
-
-	<?php if(OC_APP::isEnabled('firstrunwizard')) {?>
-	<p class="center"><a class="button" href="#" id="showWizard"><?php p($l->t('Show First Run Wizard again'));?></a></p>
-	<?php }?>
+<div id="quota-stats" class="section" style="padding: 30px 30px 0;margin-bottom: -15px;">
+    <h2><?php p($l->t('Quota Stats')); ?></h2>
 </div>
-
 
 <div id="quota" class="section">
 	<div style="width:<?php p($_['usage_relative']);?>%"
@@ -61,90 +39,6 @@
 			array($_['usage'], $_['total_space'])));?>
 		</p>
 	</div>
-</div>
-
-
-<?php
-if($_['passwordChangeSupported']) {
-	script('jquery-showpassword');
-?>
-<form id="passwordform" class="section">
-	<h2 class="inlineblock"><?php p($l->t('Password'));?></h2>
-	<div class="hidden icon-checkmark" id="password-changed"></div>
-	<div class="hidden" id="password-error"><?php p($l->t('Unable to change your password'));?></div>
-	<br>
-	<label for="pass1" class="onlyInIE8"><?php echo $l->t('Current password');?>: </label>
-	<input type="password" id="pass1" name="oldpassword"
-		placeholder="<?php echo $l->t('Current password');?>"
-		autocomplete="off" autocapitalize="off" autocorrect="off" />
-	<label for="pass2" class="onlyInIE8"><?php echo $l->t('New password');?>: </label>
-	<input type="password" id="pass2" name="personal-password"
-		placeholder="<?php echo $l->t('New password');?>"
-		data-typetoggle="#personal-show"
-		autocomplete="off" autocapitalize="off" autocorrect="off" />
-	<input type="checkbox" id="personal-show" name="show" /><label for="personal-show" class="svg"></label>
-	<input id="passwordbutton" type="submit" value="<?php echo $l->t('Change password');?>" />
-	<br/>
-	<div class="strengthify-wrapper"></div>
-</form>
-<?php
-}
-?>
-
-<?php
-if($_['displayNameChangeSupported']) {
-?>
-<form id="displaynameform" class="section">
-	<h2>
-		<label for="displayName"><?php echo $l->t('Full name');?></label>
-	</h2>
-	<input type="text" id="displayName" name="displayName"
-		value="<?php p($_['displayName'])?>"
-		autocomplete="on" autocapitalize="off" autocorrect="off" />
-    <span class="msg"></span>
-	<input type="hidden" id="oldDisplayName" name="oldDisplayName" value="<?php p($_['displayName'])?>" />
-</form>
-<?php
-} else {
-?>
-<div class="section">
-	<h2><?php echo $l->t('Full name');?></h2>
-	<span><?php if(isset($_['displayName'][0])) { p($_['displayName']); } else { p($l->t('No display name set')); } ?></span>
-</div>
-<?php
-}
-?>
-
-<?php
-if($_['passwordChangeSupported']) {
-?>
-<form id="lostpassword" class="section">
-	<h2>
-		<label for="email"><?php p($l->t('Email'));?></label>
-	</h2>
-	<input type="email" name="email" id="email" value="<?php p($_['email']); ?>"
-		placeholder="<?php p($l->t('Your email address'));?>"
-		autocomplete="on" autocapitalize="off" autocorrect="off" />
-	<span class="msg"></span><br />
-	<em><?php p($l->t('Fill in an email address to enable password recovery and receive notifications'));?></em>
-</form>
-<?php
-} else {
-?>
-<div class="section">
-	<h2><?php echo $l->t('Email'); ?></h2>
-	<span><?php if(isset($_['email'][0])) { p($_['email']); } else { p($l->t('No email address set')); }?></span>
-</div>
-<?php
-}
-?>
-
-<div id="groups" class="section">
-	<h2><?php p($l->t('Groups')); ?></h2>
-	<p><?php p($l->t('You are member of the following groups:')); ?></p>
-	<p>
-	<?php p(implode(', ', $_['groups'])); ?>
-	</p>
 </div>
 
 <?php if ($_['enableAvatars']): ?>
@@ -170,34 +64,6 @@ if($_['passwordChangeSupported']) {
 	</div>
 </form>
 <?php endif; ?>
-
-<form class="section">
-	<h2>
-		<label for="languageinput"><?php p($l->t('Language'));?></label>
-	</h2>
-	<select id="languageinput" name="lang" data-placeholder="<?php p($l->t('Language'));?>">
-		<option value="<?php p($_['activelanguage']['code']);?>">
-			<?php p($_['activelanguage']['name']);?>
-		</option>
-		<?php foreach($_['commonlanguages'] as $language):?>
-			<option value="<?php p($language['code']);?>">
-				<?php p($language['name']);?>
-			</option>
-		<?php endforeach;?>
-		<optgroup label=""></optgroup>
-		<?php foreach($_['languages'] as $language):?>
-			<option value="<?php p($language['code']);?>">
-				<?php p($language['name']);?>
-			</option>
-		<?php endforeach;?>
-	</select>
-	<?php if (OC_Util::getEditionString() === ''): ?>
-	<a href="https://www.transifex.com/projects/p/owncloud/team/<?php p($_['activelanguage']['code']);?>/"
-		target="_blank" rel="noreferrer">
-		<em><?php p($l->t('Help translate'));?></em>
-	</a>
-	<?php endif; ?>
-</form>
 
 <?php foreach($_['forms'] as $form) {
 	if (isset($form['form'])) {?>
@@ -244,6 +110,36 @@ if($_['passwordChangeSupported']) {
 	</form>
 </div>
 <?php endif; ?>
+
+<div id="clientsbox" class="section">
+	<h2><?php p($l->t('Get the apps to sync your files'));?></h2>
+    
+    <a href="https://storage.edu.tw/教育部雲端儲存桌面代理應用程式.exe" class="client">
+        <span class="client-info"><?php p($l->t('Desktop client'));?></span>
+        <span class="client-info">Windows 7, 8.x, 10</span>
+    </a>
+    
+    <a href="https://storage.edu.tw/教育部雲端儲存桌面代理應用程式.pkg" class="client">
+        <span class="client-info"><?php p($l->t('Desktop client'));?></span>
+        <span class="client-info">Mac OSX 10.7+</span>
+    </a>
+    
+    <a href="<?php p($_['clients']['android']); ?>" class="client" target="_blank">
+        <span class="client-info"><?php p($l->t('Mobile app'));?></span>
+        <span class="client-info">Android 4.0+</span>
+    </a>
+    
+    <a href="<?php p($_['clients']['ios']); ?>" class="client" target="_blank">
+        <span class="client-info"><?php p($l->t('Mobile app'));?></span>
+        <span class="client-info">iOS 8.0+</span>
+    </a>
+</div>
+
+<div id="terms-of-service" class="section">
+	<h2><?php p($l->t('Terms of service'));?></h2>
+    
+	<p><?php p($l->t('Storage quota is up to 5GB for each user.'));?><?php p($l->t('Retired teacher will be disabled in 6 months, please back up your files during the time.'));?></p>
+</div>
 
 </div>
 
