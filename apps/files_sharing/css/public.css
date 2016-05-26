@@ -1,0 +1,27 @@
+#details {
+  position: relative;
+  top: -4px;
+}
+
+.header-right .storage,
+#preview .directDownload,
+#preview .storage {
+  display: inline-block;
+}
+
+#preview .storage {
+  position: relative;
+  top: -12px;
+}
+
+#save-button {
+  height: 28px;
+  line-height: 14px;
+}
+
+.directDownload #downloadFile {
+  line-height: 26px;
+  height: 26px;
+  padding: 0;
+  max-width: 100%;
+}
