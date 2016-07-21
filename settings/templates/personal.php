@@ -14,6 +14,7 @@
         <li><a href="#goto-訊息通知"><?php p($l->t('Notifications')); ?></a></li>
         <li><a href="#clientsbox"><?php p($l->t('Get the apps to sync your files'));?></a></li>
         <li><a href="#terms-of-service"><?php p($l->t('Terms of service'));?></a></li>
+        <li><a href="#training-videos"><?php p($l->t('Training Videos'));?></a></li>
 	
         <?php foreach($_['forms'] as $form) {
             if (isset($form['anchor']) and !in_array($form['anchor'], ["clientsbox", "passwordform", "goto-訊息通知"])) {
@@ -124,6 +125,11 @@
         <span class="client-info">Mac OSX 10.7+</span>
     </a>
     
+    <a href="https://storage.edu.tw/Ubuntu_14.04-MOE-Storage-Cloud-Install.sh" class="client">
+        <span class="client-info"><?php p($l->t('Desktop client'));?></span>
+        <span class="client-info">Ubuntu 14.04</span>
+    </a>
+    
     <a href="<?php p($_['clients']['android']); ?>" class="client" target="_blank">
         <span class="client-info"><?php p($l->t('Mobile app'));?></span>
         <span class="client-info">Android 4.0+</span>
@@ -140,6 +146,19 @@
     
 	<p><?php p($l->t('Storage quota is up to 5GB for each user.'));?><?php p($l->t('Retired teacher will be disabled in 6 months, please back up your files during the time.'));?></p>
 </div>
+
+<div id="training-videos" class="section">
+	<h2><?php p($l->t('Training Videos')); ?></h2>
+	
+	<video width="400" controls>
+		<source src="../../themes/MOE/ios.mp4" type="video/mp4"/>
+	</video>
+	
+	<video width="400" controls>
+		<source src="../../themes/MOE/android.mp4" type="video/mp4"/>
+	</video>
+</div>
+
 
 </div>
 
