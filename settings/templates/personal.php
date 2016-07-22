@@ -152,31 +152,31 @@
 
 	<div class="video">
 		<h3>利用儲存服務下載講義</h3>
-		<iframe width="400" height="200" src="https://www.youtube.com/embed/BUEIFeumXt0?list=PLh1tuk4DpuRxeTg9j-5HFHlkLeaHVA9G0" frameborder="0" allowfullscreen ></iframe>
+		<iframe width="400" height="200" src="https://www.youtube.com/embed/BUEIFeumXt0?list=PLh1tuk4DpuRxeTg9j-5HFHlkLeaHVA9G0?rel=0&vq=hd1080&showinfo=0" frameborder="0" allowfullscreen ></iframe>
 	</div>	
 	<div class="video">
 		<h3>老師如何進行備課</h3>
-		<iframe width="400" height="200" src="https://www.youtube.com/embed/y8o0Ap7dBRg?list=PLh1tuk4DpuRxeTg9j-5HFHlkLeaHVA9G0" frameborder="0" allowfullscreen ></iframe>
+		<iframe width="400" height="200" src="https://www.youtube.com/embed/y8o0Ap7dBRg?list=PLh1tuk4DpuRxeTg9j-5HFHlkLeaHVA9G0?rel=0&vq=hd1080&showinfo=0" frameborder="0" allowfullscreen ></iframe>
 	</div>	
 	<div class="video">
 		<h3>如何變更雲端儲存服務大頭貼</h3>
-		<iframe width="400" height="200" src="https://www.youtube.com/embed/2HsiXblJcQA?list=PLh1tuk4DpuRxeTg9j-5HFHlkLeaHVA9G0" frameborder="0" allowfullscreen ></iframe>
+		<iframe width="400" height="200" src="https://www.youtube.com/embed/2HsiXblJcQA?list=PLh1tuk4DpuRxeTg9j-5HFHlkLeaHVA9G0?rel=0&vq=hd1080&showinfo=0" frameborder="0" allowfullscreen ></iframe>
 	</div>
 	<div class="video">
 		<h3>如何建立資料夾與上傳講義</h3>
-		<iframe width="400" height="200" src="https://www.youtube.com/embed/AqY9VVgEv_M?list=PLh1tuk4DpuRxeTg9j-5HFHlkLeaHVA9G0" frameborder="0" allowfullscreen ></iframe>
+		<iframe width="400" height="200" src="https://www.youtube.com/embed/AqY9VVgEv_M?list=PLh1tuk4DpuRxeTg9j-5HFHlkLeaHVA9G0?rel=0&vq=hd1080&showinfo=0" frameborder="0" allowfullscreen ></iframe>
 	</div>
 	<div class="video">
 		<h3>如何進入雲端儲存服務</h3>
-		<iframe width="400" height="200" src="https://www.youtube.com/embed/m0b8LQ83qys?list=PLh1tuk4DpuRxeTg9j-5HFHlkLeaHVA9G0" frameborder="0" allowfullscreen ></iframe>
+		<iframe width="400" height="200" src="https://www.youtube.com/embed/m0b8LQ83qys?list=PLh1tuk4DpuRxeTg9j-5HFHlkLeaHVA9G0?rel=0&vq=hd1080&showinfo=0"  frameborder="0" allowfullscreen ></iframe>
 	</div>
 	<div class="video">
 		<h3>用戶端代理程式安裝與設定</h3>
-		<iframe width="400" height="200" src="https://www.youtube.com/embed/8l95wdjEcUY?list=PLh1tuk4DpuRxeTg9j-5HFHlkLeaHVA9G0" frameborder="0" allowfullscreen ></iframe>
+		<iframe width="400" height="200" src="https://www.youtube.com/embed/8l95wdjEcUY?list=PLh1tuk4DpuRxeTg9j-5HFHlkLeaHVA9G0?rel=0&vq=hd1080&showinfo=0" frameborder="0" allowfullscreen ></iframe>
 	</div>
 	<div class="video">
 		<h3>學生如何將老師分享的資料夾加入雲端儲存服務</h3>
-		<iframe width="400" height="200" src="https://www.youtube.com/embed/T4DSfCXHZE4?list=PLh1tuk4DpuRxeTg9j-5HFHlkLeaHVA9G0" frameborder="0" allowfullscreen ></iframe>
+		<iframe width="400" height="200" src="https://www.youtube.com/embed/T4DSfCXHZE4?list=PLh1tuk4DpuRxeTg9j-5HFHlkLeaHVA9G0?rel=0&vq=hd1080&showinfo=0" frameborder="0" allowfullscreen ></iframe>
 	</div>
 
 </div>
