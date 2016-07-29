@@ -14,6 +14,7 @@
     "Notifications" : "訊息通知",
     "Storage quota is up to 5GB for each user." : "本雲端儲存服務提供用戶儲存空間 5GB。",
     "Retired teacher will be disabled in 6 months, please back up your files during the time." : "教師用戶於離職或退休後六個月，本服務將逕行停用，請用戶務必於期限內完成資料備份。",
-    "Training Videos" : "教育影片"
+    "Training Videos" : "教學影片",
+    "Learning Guide" : "學習手冊"
 },"pluralForm" :"nplurals=1; plural=0;"
 }

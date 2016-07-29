@@ -15,6 +15,7 @@
         <li><a href="#clientsbox"><?php p($l->t('Get the apps to sync your files'));?></a></li>
         <li><a href="#terms-of-service"><?php p($l->t('Terms of service'));?></a></li>
         <li><a href="#training-videos"><?php p($l->t('Training Videos'));?></a></li>
+        <li><a href="#learning-guide"><?php p($l->t('Learning Guide'));?></a></li>
 	
         <?php foreach($_['forms'] as $form) {
             if (isset($form['anchor']) and !in_array($form['anchor'], ["clientsbox", "passwordform", "goto-訊息通知"])) {
@@ -178,6 +179,40 @@
 		<h3>學生如何將老師分享的資料夾加入雲端儲存服務</h3>
 		<iframe width="400" height="200" src="https://www.youtube.com/embed/T4DSfCXHZE4?list=PLh1tuk4DpuRxeTg9j-5HFHlkLeaHVA9G0?rel=0&vq=hd1080&showinfo=0" frameborder="0" allowfullscreen ></iframe>
 	</div>
+	<div class="video">
+		<h3>老師如何利用手機進行備課</h3>
+		<iframe width="400" height="200" src="https://www.youtube.com/embed/TS7JsW_PyrM?rel=0&vq=hd1080&showinfo=0" frameborder="0" allowfullscreen ></iframe>
+	</div>
+	<div class="video">
+		<h3>透過分享連結分享檔案或資料夾</h3>
+		<iframe width="400" height="200" src="https://www.youtube.com/embed/gLQF1hf5rz8?rel=0&vq=hd1080&showinfo=0" frameborder="0" allowfullscreen ></iframe>
+	</div>
+	<div class="video">
+		<h3>輸入指定使用者的校園電子郵件來分享檔案或資料夾</h3>
+		<iframe width="400" height="200" src="https://www.youtube.com/embed/nvxmReECujE?rel=0&vq=hd1080&showinfo=0" frameborder="0" allowfullscreen ></iframe>
+	</div>
+	<div class="video">
+		<h3>雲端儲存服務安裝與設定</h3>
+		<iframe width="400" height="200" src="https://www.youtube.com/embed/kByyr6yYqlc?rel=0&vq=hd1080&showinfo=0" frameborder="0" allowfullscreen ></iframe>
+	</div>
+
+</div>
+
+<div id="learning-guide" class="section">
+	<h2><?php p($l->t('Learning Guide'));?></h2>
+
+     	<a href="../../themes/MOE/校園雲端電子郵件暨雲端儲存應用服務教師手冊.pdf" class="client" target="_blank">
+		<img src="../../themes/MOE/1.png" height="150" width="200" >
+        </a>
+
+	<a href="../../themes/MOE/雲端儲存應用服務簡易說明.pdf" class="client" target="_blank">
+		<img src="../../themes/MOE/2.png" height="150" width="200" >
+        </a>
+
+	<a href="../../themes/MOE/雲端儲存服務教育訓練簡報.pptx" class="client">
+		<img src="../../themes/MOE/3.png" height="150" width="200" >
+        </a>
+
 
 </div>
 
