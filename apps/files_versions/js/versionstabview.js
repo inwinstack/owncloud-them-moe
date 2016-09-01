@@ -18,7 +18,7 @@
 		'<span class="versiondate has-tooltip" title="{{formattedTimestamp}}">{{relativeTimestamp}}</span>' +
 		'</a>' +
 		'<a href="#" class="revertVersion" title="{{revertLabel}}"><img src="{{revertIconUrl}}" /></a>' +
-    '<a href="#" class="deleteVersion hidden" title="{{deleteLabel}}"><img src="{{deleteIconUrl}}" /></a>' +
+    '{{#if deletable}}<a href="#" class="deleteVersion" title="{{deleteLabel}}"><img src="{{deleteIconUrl}}" /></a>{{/if}}' +
     '</li>';
 
 	var TEMPLATE =
@@ -36,6 +36,8 @@
 		/** @lends OCA.Versions.VersionsTabView.prototype */ {
 		id: 'versionsTabView',
 		className: 'tab versionsTabView',
+
+    files_version_cleaner_is_enabled: null,
 
 		_template: null,
 
@@ -189,18 +191,9 @@
 		},
 
 		_onEndRequest: function() {
-      var self = this;
-
 			this._toggleLoading(false);
 			this.$el.find('.empty').toggleClass('hidden', !!this.collection.length);
 			this.$el.find('.showMoreVersions').toggleClass('hidden', !this.collection.hasMoreResults());
-
-      OC.AppConfig.getValue('files_version_cleaner', 'enabled', null, function(data){
-        files_version_cleaner_is_enabled = data;
-        if(data === 'yes') {
-          self.$el.find('.deleteVersion').removeClass('hidden');
-        }
-      });
 		},
 
 		_onAddModel: function(model) {
@@ -225,10 +218,20 @@
 
 		setFileInfo: function(fileInfo) {
 			if (fileInfo) {
-				this.render();
-				this.collection.setFileInfo(fileInfo);
-				this.collection.reset([], {silent: true});
-				this.nextPage();
+        var self = this;
+        var defer = $.Deferred();
+
+        OC.AppConfig.getValue('files_version_cleaner', 'enabled', null, function(data){
+          self.files_version_cleaner_is_enabled = data;
+          defer.resolve();
+        });
+
+        $.when(defer).done(function() {
+          self.render();
+          self.collection.setFileInfo(fileInfo);
+          self.collection.reset([], {silent: true});
+          self.nextPage();
+        });
 			} else {
 				this.render();
 				this.collection.reset();
@@ -237,6 +240,7 @@
 
 		_formatItem: function(version) {
 			var timestamp = version.get('timestamp') * 1000;
+      var deletable = this.files_version_cleaner_is_enabled === 'yes' ? true : false;
 			return _.extend({
 				formattedTimestamp: OC.Util.formatDate(timestamp),
 				relativeTimestamp: OC.Util.relativeModifiedDate(timestamp),
@@ -247,6 +251,7 @@
 				previewUrl: version.getPreviewUrl(),
 				revertLabel: t('files_versions', 'Restore'),
 				deleteLabel: t('files_versions', 'Delete'),
+        deletable: deletable,
 			}, version.attributes);
 		},
 
