@@ -9,8 +9,6 @@
  */
 
 (function() {
-  var files_version_cleaner_is_enabled;
-
 	var TEMPLATE_ITEM =
 		'<li data-revision="{{timestamp}}">' +
 		'<img class="preview" src="{{previewUrl}}"/>' +
@@ -50,6 +48,8 @@
 		},
 
 		initialize: function() {
+      var self = this;
+
 			OCA.Files.DetailTabView.prototype.initialize.apply(this, arguments);
 			this.collection = new OCA.Versions.VersionCollection();
 			this.collection.on('request', this._onRequest, this);
@@ -57,6 +57,18 @@
 			this.collection.on('update', this._onUpdate, this);
 			this.collection.on('error', this._onError, this);
 			this.collection.on('add', this._onAddModel, this);
+
+      $.ajaxSetup({
+          async: false
+      });
+
+      OC.AppConfig.getValue('files_version_cleaner', 'enabled', null, function(data){
+        self.files_version_cleaner_is_enabled = data === 'yes' ? true : false;
+      });
+
+      $.ajaxSetup({
+          async: true
+      });
 		},
 
 		getLabel: function() {
@@ -68,7 +80,8 @@
 				return;
 			}
 
-			if (this.collection.getFileInfo() && this.collection.getFileInfo().isDirectory()) {
+			if (this.collection.getFileInfo() && this.collection.getFileInfo().isDirectory() && this.files_version_cleaner_is_enabled) {
+        new OCA.VersionCleaner.VersionCleanerView({el: this.$el, fileInfo: this.collection.getFileInfo()});
 				return;
 			}
 			this.collection.fetchNext();
@@ -218,29 +231,17 @@
 
 		setFileInfo: function(fileInfo) {
 			if (fileInfo) {
-        var self = this;
-        var defer = $.Deferred();
-
-        OC.AppConfig.getValue('files_version_cleaner', 'enabled', null, function(data){
-          self.files_version_cleaner_is_enabled = data;
-          defer.resolve();
-        });
-
-        $.when(defer).done(function() {
-          self.render();
-          self.collection.setFileInfo(fileInfo);
-          self.collection.reset([], {silent: true});
-          self.nextPage();
-        });
+        this.render();
+        this.collection.setFileInfo(fileInfo);
+        this.collection.reset([], {silent: true});
+        this.nextPage();
 			} else {
 				this.render();
 				this.collection.reset();
 			}
-		},
-
+		}, 
 		_formatItem: function(version) {
 			var timestamp = version.get('timestamp') * 1000;
-      var deletable = this.files_version_cleaner_is_enabled === 'yes' ? true : false;
 			return _.extend({
 				formattedTimestamp: OC.Util.formatDate(timestamp),
 				relativeTimestamp: OC.Util.relativeModifiedDate(timestamp),
@@ -251,7 +252,7 @@
 				previewUrl: version.getPreviewUrl(),
 				revertLabel: t('files_versions', 'Restore'),
 				deleteLabel: t('files_versions', 'Delete'),
-        deletable: deletable,
+        deletable: this.files_version_cleaner_is_enabled,
 			}, version.attributes);
 		},
 
@@ -277,6 +278,17 @@
 			if (!fileInfo) {
 				return false;
 			}
+
+      if(this.files_version_cleaner_is_enabled){
+        if(!fileInfo.isDirectory() && fileInfo.attributes.path === '/') {
+          return false;
+        }
+        if(fileInfo.attributes.path === '/') {
+          return true;
+        }
+      }
+
+
 			return !fileInfo.isDirectory();
 		}
 	});
