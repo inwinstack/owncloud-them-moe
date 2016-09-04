@@ -81,7 +81,8 @@
 			}
 
 			if (this.collection.getFileInfo() && this.collection.getFileInfo().isDirectory() && this.files_version_cleaner_is_enabled) {
-        new OCA.VersionCleaner.VersionCleanerView({el: this.$el, fileInfo: this.collection.getFileInfo()});
+        var subtab = new OCA.VersionCleaner.VersionCleanerView({fileInfo: this.collection.getFileInfo()});
+        this.$el.html(subtab.render().$el);
 				return;
 			}
 			this.collection.fetchNext();
