@@ -35,8 +35,6 @@
 		id: 'versionsTabView',
 		className: 'tab versionsTabView',
 
-    files_version_cleaner_is_enabled: null,
-
 		_template: null,
 
 		$versionsContainer: null,
@@ -57,19 +55,7 @@
 			this.collection.on('update', this._onUpdate, this);
 			this.collection.on('error', this._onError, this);
 			this.collection.on('add', this._onAddModel, this);
-
-      $.ajaxSetup({
-          async: false
-      });
-
-      OC.AppConfig.getValue('files_version_cleaner', 'enabled', null, function(data){
-        self.files_version_cleaner_is_enabled = data === 'yes' ? true : false;
-      });
-
-      $.ajaxSetup({
-          async: true
-      });
-		},
+    },
 
 		getLabel: function() {
 			return t('files_versions', 'Versions');
@@ -80,7 +66,7 @@
 				return;
 			}
 
-			if (this.collection.getFileInfo() && this.collection.getFileInfo().isDirectory() && this.files_version_cleaner_is_enabled) {
+			if (this.collection.getFileInfo() && this.collection.getFileInfo().isDirectory()) {
         var subtab = new OCA.VersionCleaner.VersionCleanerView({fileInfo: this.collection.getFileInfo()});
         this.$el.html(subtab.render().$el);
 				return;
@@ -253,7 +239,7 @@
 				previewUrl: version.getPreviewUrl(),
 				revertLabel: t('files_versions', 'Restore'),
 				deleteLabel: t('files_versions', 'Delete'),
-        deletable: this.files_version_cleaner_is_enabled,
+        deletable: true,
 			}, version.attributes);
 		},
 
@@ -280,15 +266,12 @@
 				return false;
 			}
 
-      if(this.files_version_cleaner_is_enabled){
-        if(!fileInfo.isDirectory() && fileInfo.attributes.path === '/') {
-          return false;
-        }
-        if(fileInfo.attributes.path === '/') {
-          return true;
-        }
+      if(!fileInfo.isDirectory() && fileInfo.attributes.path === '/') {
+        return false;
       }
-
+      if(fileInfo.attributes.path === '/') {
+        return true;
+      }
 
 			return !fileInfo.isDirectory();
 		}
