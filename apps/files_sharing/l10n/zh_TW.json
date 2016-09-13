@@ -1,0 +1,8 @@
+{ "translations": {
+    "Sharing" : "分享",
+    "Shared with you" : "別人分享給我",
+    "Shared with others" : "我分享給別人",
+    "Shared by link" : "使用連結分享",
+    "Add to your ownCloud" : "加入到我的雲端儲存空間"
+},"pluralForm" :"nplurals=1; plural=0;"
+}

@@ -1,12 +1,133 @@
+/* LOGO -------------------------------------------------------------------- */
+
+#owncloud {
+  padding: 0;
+}
+
 #header .logo-icon {
-  background-image: url(../img/header-logo-icon.png);
-  height: 35px;
+  background-image: url(../img/logo-icon.svg);
+  background-position-y: 4px;
+  height: 45px;
   margin-left: 15px;
-  width: 45px;
+  width: 235px;
 }
 
 #header .logo {
-  background-image: url(../img/login-logo-icon.png);
-  height: 180px;
-  width: 256px;
+  background-image: url(../img/logo-icon.svg);
+  background-size: 280px 150px;
+  height: 150px;
+  width: 280px;
+}
+
+#apps-management {
+  opacity: 1;
+}
+
+#header .header-appname-container {
+  left: 125px;
+  padding-top: 12px;
+}
+
+.header-appname {
+  color: #009CBE;
+}
+
+#apps {
+  word-spacing: -4px;
+}
+
+#settings {
+  color: #eee;
+}
+
+/* HEADER ---------------------------------------------------------------  */
+
+#body-user #header,
+#body-settings #header,
+#body-public #header {
+  background-color: #e6f7ff;
+}
+
+/* NAVIGATION ------------------------------------------------------------  */
+#navigation {
+    width: auto;
+}
+
+#navigation a span {
+  color: #666;
+}
+
+#navigation a:hover span,
+#navigation a:focus span,
+#navigation a.active span {
+    color: #009CBE;
+  }
+
+#expand {
+  color: #009CBE;
+}
+
+#expand:hover,
+#expand:focus,
+#expand:active {
+  color: #086E84;
+}
+
+#navigation li[data-id="activity"] {
+  float: right;
+}
+
+@media (min-width: 992px) {
+  #header .header-hidden {
+    display: none;
+  }
+
+  #navigation {
+    background-color: transparent;
+    box-shadow: none;
+    border-radius: 0;
+    display: block !important;
+    top: 0;
+    left: 250px;
+  }
+
+  #navigation a {
+    width: auto;
+    height: 45px;
+    padding: 5px 12px;
+  }
+
+  #navigation a span {
+    color: #666;
+    font-size: 120%;
+    width: auto;
+    vertical-align: super;
+    padding-left: 5px;
+  }
+
+  #navigation a img,
+  #navigation a span {
+    opacity: .9;
+  }
+
+  #navigation a.active {
+    background-color: #B5E3F9;
+    border-bottom: 3px solid #009CBE;
+  }
+
+/* loading feedback for apps */
+  #navigation .app-loading .icon-loading-dark {
+    display: inline !important;
+    position: absolute;
+    top: 5px;
+    left: 15px;
+    width: 32px;
+    height: 32px;
+  }
+}
+
+@media (min-width: 992px) and (max-width: 1200px) {
+  #navigation .app-icon {
+    display: none;
+  }
 }

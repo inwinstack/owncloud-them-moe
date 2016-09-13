@@ -1,0 +1,4 @@
+#app-navigation li > a[data-navigation=files_favorites],
+#app-navigation li > a[data-navigation=shares] {
+  display: none;
+}

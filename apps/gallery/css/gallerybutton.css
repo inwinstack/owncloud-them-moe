@@ -1,0 +1,12 @@
+#controls .button.sorting {
+    width: 130px;
+}
+
+#controls .button.sorting span {
+    margin-left: 30px;
+}
+
+#filelist-button {
+    display: none!important;
+}
+

@@ -35,9 +35,6 @@
 								</h1>
 							</div>
 							<div id="logo-claim" style="display:none;"><?php p($theme->getLogoClaim()); ?></div>
-                                                        <div>
-                                                            <img src="/themes/MOE/core/img/moe-title.png">
-                                                        </div>
 						</div>
 					</header>
 				<?php endif; ?>
