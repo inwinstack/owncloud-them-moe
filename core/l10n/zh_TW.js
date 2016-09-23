@@ -291,6 +291,14 @@ OC.L10N.register(
     "Start update" : "開始升級",
     "To avoid timeouts with larger installations, you can instead run the following command from your installation directory:" : "在大型安裝上，為了避免升級請求逾時，你也可以在安裝目錄執行下列指令：",
     "This %s instance is currently in maintenance mode, which may take a while." : "這個 %s 安裝目前處於維護模式，需要一段時間恢復。",
-    "This page will refresh itself when the %s instance is available again." : "%s 安裝恢復可用之後，本頁會自動重新整理"
+    "This page will refresh itself when the %s instance is available again." : "%s 安裝恢復可用之後，本頁會自動重新整理",
+    "Left is new file and right is origin file" : "左邊是新的檔案，右邊是原本的檔案",
+    "Rename for the new file" : "為新檔案重新命名",
+    "Rename" : "重新命名",
+    "Skip" : "略過",
+    "Replace" : "取代",
+    "Apply this action to all files" : "全部套用此設定",
+    "This filename already exists." : "此檔案名稱已存在"
+
 },
 "nplurals=1; plural=0;");

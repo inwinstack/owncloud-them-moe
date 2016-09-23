@@ -1,0 +1,31 @@
+<div id="{dialog_name}" title="{title}" class="fileexists">
+	<span class="why">{why}<!-- Which files do you want to keep --></span><br/>
+	<span class="what">{what}<!-- If you select both versions, the copied file will have a number added to its name. --></span><br/>
+	<br/>
+	<table>
+    <tr><th><input type="checkbox" class="checkbox"  id="use_rename"><label for="use_rename">{rename}</label></th><th>{newname}<input type="text" id="newname" disabled></th></tr>
+    <tr><th><input id="checkbox-allfiles" class="checkbox" type="checkbox" /><label for="checkbox-allfiles">{allfiles}</label></th><th></th></tr>
+	</table>
+	<div class="conflicts">
+		<div class="template">
+			<div class="filename"></div>
+			<div class="replacement">
+        <!--<input type="radio" name="choosefile" class="checkbox u-left"/>-->
+				<label>
+				<span class="svg icon"></span>
+				<div class="mtime"></div>
+				<div class="size"></div>
+				</label>
+			</div>
+			<div class="original">
+        <!--<input type="radio" name="choosefile" class="checkbox u-left" />-->
+				<label>
+				<span class="svg icon"></span>
+				<div class="mtime"></div>
+				<div class="size"></div>
+				<div class="message"></div>
+				</label>
+			</div>
+		</div>
+	</div>
+</div>
