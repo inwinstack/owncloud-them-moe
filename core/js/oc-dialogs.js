@@ -462,7 +462,7 @@ var OCdialogs = {
 
     var showdialog = function(original, replacement, data) {
       $.when(OC.dialogs._getFileExistsTemplate()).then(function($tmpl) {
-        
+
         var dialogName = 'oc-dialog-fileexists-content';
 		    var dialogId = '#' + dialogName;
 				var title = t('core','One file conflict');
@@ -477,8 +477,6 @@ var OCdialogs = {
           
           what: t('core', 'Left is new file and right is origin file'),
           
-          newname: t('core', 'Rename for the new file'),
-          
           rename: t('core', 'Rename')
 				});
 				$('body').append($dlg);
@@ -490,22 +488,72 @@ var OCdialogs = {
 				}
 
 				var buttonlist = [{
-						text: t('core', 'Cancel'),
-						classes: 'cancel',
-						click: function(){
-              
-							if ( typeof controller.onCancel !== 'undefined') {
-								controller.onCancel(data);
+            text: t('core', 'Rename'),
+            classes: 'rename',
+
+            click: function() {
+              var div = $('<div>').addClass('oc-dialog-buttonrow twobuttons');
+              $('.fourbuttons').hide();
+              div.append($('#newname'));
+              div.append($('<button class="back">').text(t('core', 'Back')));
+              div.append($('<button class="rename">').text(t('core', 'Submit')));
+              $(dialogId).after(div);
+
+              $('.twobuttons button').on('click', function() {
+
+                $(this).addClass('primary');
+
+                if($(this).hasClass('back')) {
+                  $('.twobuttons').hide();
+                  $('.fourbuttons').show();
+                } else {
+                  if(data === null) {
+                    data = self.dataQueue.shift();
+                  }
+                  if ( typeof controller.onRename !== 'undefined') {
+                    controller.onRename(data, $('#newname').val());
+                  
+							    }
+
+                  var nextoriginal = self.originalQueue.shift();
+                  var nextreplacement = self.replacementQueue.shift();
+                  var nextdata = self.dataQueue.shift();
+
+				          $(dialogId).ocdialog('close');
+				          $(dialogId).remove();
+                  nextdata && showdialog(nextoriginal, nextreplacement, nextdata);
+                }
+
+              });
+            }
+          
+          },
+          {
+            text: t('core', 'Replace'),
+						classes: 'replace',
+						
+            click: function() {
+
+              if(data === null) {
+                data = self.dataQueue.shift();
+                
+              }
+							if ( typeof controller.onReplace !== 'undefined') {
+                controller.onReplace(data);
 							}
-							$(dialogId).ocdialog('close');
-              $(dialogId).remove();
-              self.dataQueue = [];
-              self.originalQueue = [];
-              self.replacementQueue = [];
-              
+
+              var nextoriginal = self.originalQueue.shift();
+              var nextreplacement = self.replacementQueue.shift();
+              var nextdata = self.dataQueue.shift();
+
+				      $(dialogId).ocdialog('close');
+				      $(dialogId).remove();
+              nextdata && showdialog(nextoriginal, nextreplacement, nextdata);
+
 						}
-					},
-					{
+ 
+          },
+          {
 						text: t('core', 'Skip'),
 						classes: 'skip',
 						
@@ -522,58 +570,28 @@ var OCdialogs = {
               var nextoriginal = self.originalQueue.shift();
               var nextreplacement = self.replacementQueue.shift();
               var nextdata = self.dataQueue.shift();
-              var checked  = $('#checkbox-allfiles').prop('checked') ? true : false;
               $(dialogId).ocdialog('close');
               $(dialogId).remove();
-              nextdata && !checked &&  showdialog(nextoriginal, nextreplacement, nextdata);
+              nextdata && showdialog(nextoriginal, nextreplacement, nextdata);
 
-              if(checked && nextdata &&  typeof controller.onSkip !== 'undefined') {
-                while(nextdata) {
-                  controller.onSkip(nextdata);
-                  nextdata = self.dataQueue.shift();
-                  self.originalQueue.shift();
-                  self.replacementQueue.shift();
-                }
-              }
-						}
+            }
 					}, 
           {
-            text: t('core', 'Replace'),
-						classes: 'replace',
-						
-            click: function() {
-
-              if(data === null) {
-                data = self.dataQueue.shift();
-                
-              }
-							if ( typeof controller.onReplace !== 'undefined' && $('.threebuttons button').hasClass('replace')) {
-                controller.onReplace(data);
-							} else if(typeof controller.onAutorename !== 'undefined' && $('.threebuttons button').hasClass('rename')) {
-                controller.onRename(data, $('#newname').val());
-              }
-
-              var nextoriginal = self.originalQueue.shift();
-              var nextreplacement = self.replacementQueue.shift();
-              var nextdata = self.dataQueue.shift();
-              var checked  = $('#checkbox-allfiles').prop('checked') ? true : false;
-				      $(dialogId).ocdialog('close');
-				      $(dialogId).remove();
-              nextdata && !checked && showdialog(nextoriginal, nextreplacement, nextdata);
-
-              if(checked && nextdata &&  typeof controller.onReplace !== 'undefined') {
-                while(nextdata) {
-                  controller.onReplace(nextdata);
-                  nextdata = self.dataQueue.shift();
-                  self.originalQueue.shift();
-                  self.replacementQueue.shift();
-                }
-              }
-
-            
+						text: t('core', 'Cancel'),
+						classes: 'cancel',
+						click: function(){
+              
+							if ( typeof controller.onCancel !== 'undefined') {
+								controller.onCancel(data);
+							}
+							$(dialogId).ocdialog('close');
+              $(dialogId).remove();
+              self.dataQueue = [];
+              self.originalQueue = [];
+              self.replacementQueue = [];
+              
 						}
- 
-          }];
+					}];
 				$(dialogId).ocdialog({
 					width: 500,
 					closeOnEscape: true,
@@ -587,52 +605,19 @@ var OCdialogs = {
         });
 
 				$(dialogId).css('height','auto');
-        
-        $(dialogId).find('#use_rename').on('click', function () {
-          
-          var checked = $(this).prop('checked');
-          var exist_input = $('#newname').attr('style');
-
-          $(dialogId).find('#newname').prop('disabled', !checked);
-          
-          checked ? $('.threebuttons').find('.replace').removeClass('replace').addClass('rename').text(t('core', 'Rename')) : $('.threebuttons').find('.rename').removeClass('rename').addClass('replace').text(t('core', 'Replace'));
-          
-          if(exist_input && !checked) {
-            $('th br').remove();
-            $('.error-tooltip').remove();
-            $('#newname').css({'color': '', 'border-color': ''});
-            $('.threebuttons .replace').prop('disabled',false);
-          } else if(FileList.inList($('#newname').val())) {
-            $('#newname').after($('<small class="error-tooltip">').css({'color':'red', 'padding-left' :'148px'}).text(t('core', 'This filename already exists.'))).after('<br>');
-            $('#newname').css({'color':'red', 'border-color': 'red'});
-            $('.threebuttons .rename').prop('disabled',true);
-          }
-        
-        });
-        
-        $(dialogId).find('#checkbox-allfiles').on('click', function() {
-         // TODO multi dialogs skip 
-          var checked = $(this).prop('checked');
-          var rename_checked  = $(dialogId).find('#use_rename').prop('checked');
-
-          checked && rename_checked && $(dialogId).find('#use_rename').trigger('click');
-          $(dialogId).find('#use_rename').prop('disabled', checked); 
-
-
-        });
 
         $(dialogId).find('#newname').on('input', function() {
           var input = $(this).val();
 
           if(FileList.inList(input)) {
-            $(this).after($('<small class="error-tooltip">').css({'color':'red', 'padding-left' :'148px'}).text(t('core', 'This filename already exists.'))).after('<br>');
+           // $(this).after($('<small class="error-tooltip">').css({'color':'red', 'padding-left' :'148px'}).text(t('core', 'This filename already exists.'))).after('<br>');
             $(this).css({'color':'red', 'border-color': 'red'});
-            $('.threebuttons .rename').prop('disabled',true);
+            $('.twobuttons .rename').prop('disabled',true);
           } else {
             $('th br').remove();
-            $('.error-tooltip').remove();
+            //$('.error-tooltip').remove();
             $(this).css({'color': '', 'border-color': ''});
-            $('.threebuttons .rename').prop('disabled',false);
+            $('.twobuttons .rename').prop('disabled',false);
           }
 
         });
@@ -798,7 +783,7 @@ var OCdialogs = {
 		var defer = $.Deferred();
 		if (!this.$fileexistsTemplate) {
 			var self = this;
-			$.get(OC.generateUrl('themes/test/apps/files/templates/fileexists.html').replace(/index.php\//g, ''), function (tmpl) {
+			$.get(OC.generateUrl('themes/MOE/apps/files/templates/fileexists.html').replace(/index.php\//g, ''), function (tmpl) {
 				self.$fileexistsTemplate = $(tmpl);
 				defer.resolve(self.$fileexistsTemplate);
 			})
