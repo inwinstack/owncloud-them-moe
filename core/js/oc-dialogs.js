@@ -492,15 +492,26 @@ var OCdialogs = {
             classes: 'rename',
 
             click: function() {
-              var div = $('<div>').addClass('oc-dialog-buttonrow twobuttons');
               $('.fourbuttons').hide();
-              div.append($('#newname'));
-              div.append($('<button class="back">').text(t('core', 'Back')));
-              div.append($('<button class="rename">').text(t('core', 'Submit')));
-              $(dialogId).after(div);
+              if(!$('.twobuttons').length) {
+                var div = $('<div>').addClass('oc-dialog-buttonrow twobuttons');
+                div.append($('#newname'));
+                div.append($('<button class="back">').text(t('core', 'Back')));
+                div.append($('<button class="rename">').text(t('core', 'Submit')));
+            } else {
+              $('.twobuttons').show();
+            }
+              if(FileList.inList($('#newname').val())) {
+                console.dir($('.twobuttons'));
+                $('.twobuttons .rename').prop('disabled',true);
+              } else {
+                $('.twobuttons .rename').prop('disabled',false);
+              }
 
+              $(dialogId).after(div);
               $('.twobuttons button').on('click', function() {
 
+                
                 $(this).addClass('primary');
 
                 if($(this).hasClass('back')) {
@@ -514,6 +525,8 @@ var OCdialogs = {
                     controller.onRename(data, $('#newname').val());
                   
 							    }
+
+                  $('.twobuttons').remove();
 
                   var nextoriginal = self.originalQueue.shift();
                   var nextreplacement = self.replacementQueue.shift();
