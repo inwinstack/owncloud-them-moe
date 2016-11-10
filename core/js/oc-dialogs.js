@@ -472,11 +472,9 @@ var OCdialogs = {
 					type: 'fileexists',
           
 					allfiles: t('core','Apply this action to all files'),
-
 					why: t('core','Which files do you want to keep?'),
-          
-          what: t('core', 'Left is new file and right is origin file'),
-          
+          allnewfiles: t('core','New Files'),
+					allexistingfiles: t('core','Already existing files'),
           rename: t('core', 'Rename')
 				});
 				$('body').append($dlg);
