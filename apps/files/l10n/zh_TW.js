@@ -116,6 +116,8 @@ OC.L10N.register(
     "No favorites" : "沒有最愛",
     "Files and folders you mark as favorite will show up here" : "您標記為最愛的檔案與資料夾將會顯示在這裡",
     "Text file" : "新增文字檔",
-    "New text file.txt" : "新文字檔.txt"
+    "New text file.txt" : "新文字檔.txt",
+    "Are you sure to force delete external file? these files contains external file": "你確定要強制刪除外部檔案？ 這些檔案包含外部儲存的檔案",
+    "File Delete": "檔案刪除"
 },
 "nplurals=1; plural=0;");
