@@ -88,7 +88,7 @@ OC.L10N.register(
     "One file conflict" : "一個檔案衝突",
     "New Files" : "新檔案",
     "Already existing files" : "已經存在的檔案",
-    "Which files do you want to keep?" : "您要保留哪一個檔案？",
+    "Which files do you want to keep?" : "請選擇後續的操作：",
     "If you select both versions, the copied file will have a number added to its name." : "如果您同時選擇兩個版本，被複製的那個檔案名稱後面會加上編號",
     "Cancel" : "取消",
     "Continue" : "繼續",
@@ -244,6 +244,7 @@ OC.L10N.register(
     "Replace" : "覆蓋",
     "Submit" : "確定",
     "Back" : "回上一頁",
-    "This filename already exists." : "此檔案名稱已存在"
+    "This filename already exists." : "此檔案名稱已存在",
+    "file conflict": "檔案衝突"
 },
 "nplurals=1; plural=0;");

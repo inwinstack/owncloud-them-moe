@@ -465,7 +465,7 @@ var OCdialogs = {
 
         var dialogName = 'oc-dialog-fileexists-content';
 		    var dialogId = '#' + dialogName;
-				var title = t('core','One file conflict');
+				var title = t('core','file conflict');
 				var $dlg = $tmpl.octemplate({
 					dialog_name: dialogName,
 					title: title,
@@ -722,7 +722,7 @@ var OCdialogs = {
       
       Autorename($('.conflict .filename').text(), FileList.getCurrentDirectory()) .done(function(data) {
         matches = data.match(/.*\/(.*)"/);
-        $('#newname').attr({value: matches[1]});
+        $('#newname').attr({value: unescape(matchs[1].replace(/\\/g, "%"))});
       });
 
     };
