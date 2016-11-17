@@ -1983,7 +1983,7 @@
 			if (files && files.substr) {
 				files=[files];
 			}
-      $.each(files, function(index, file) {
+      files && $.each(files, function(index, file) {
         var attribute = self.getModelForFile(file).attributes;
         
         if('mountType' in attribute && attribute.mountType !== 'shared-root') {
@@ -1991,7 +1991,7 @@
           return;
         }
       });
-      if(remote_status) {
+      if(remote_status || $('tbody tr').data('mounttype')) {
         OC.dialogs.confirm(
         t('files', 'Are you sure to force delete external file? these files contains external file'),
         t('files', 'File Delete'),
