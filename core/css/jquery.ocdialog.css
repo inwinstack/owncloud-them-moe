@@ -42,10 +42,19 @@
 .oc-dialog-buttonrow.fourbuttons button:nth-child(3) {
 	float: left;
 }
+.oc-dialog-buttonrow.fourbuttons input {
+	float: left;
+  margin-top: 10px;
+}
+.oc-dialog-buttonrow.fourbuttons label {
+	float: left;
+  margin-top: 8px;
+}
 
 .oc-dialog-buttonrow.fourbuttons button:nth-child(4) {
 	float: right;
 }
+
 
 .oc-dialog-buttonrow.twobutton button:nth-child(1) {
 	float: right;
@@ -54,8 +63,10 @@
 .oc-dialog-buttonrow.twobuttons button:nth-child(2) {
 	float: right;
 }
+
 .oc-dialog-buttonrow.twobuttons input {
 	float: left;
+  width: 70%;
 }
 
 

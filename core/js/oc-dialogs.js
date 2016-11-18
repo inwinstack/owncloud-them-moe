@@ -472,15 +472,16 @@ var OCdialogs = {
 					type: 'fileexists',
           
 					allfiles: t('core','Apply this action to all files'),
-					why: t('core','Which files do you want to keep?'),
           allnewfiles: t('core','New Files'),
 					allexistingfiles: t('core','Already existing files'),
+					why: t('core','Which files do you want to keep?'),
           rename: t('core', 'Rename')
 				});
 				$('body').append($dlg);
         
 				if (original && replacement) {
 					var $conflicts = $dlg.find('.conflicts');
+          $dlg.find('.originfilename').text(original.name);
 					addConflict($conflicts, original, replacement);
           
 				}
@@ -497,10 +498,10 @@ var OCdialogs = {
                 div.append($('<button class="back">').text(t('core', 'Back')));
                 div.append($('<button class="rename">').text(t('core', 'Submit')));
             } else {
+
               $('.twobuttons').show();
             }
               if(FileList.inList($('#newname').val())) {
-                console.dir($('.twobuttons'));
                 $('.twobuttons .rename').prop('disabled',true);
               } else {
                 $('.twobuttons .rename').prop('disabled',false);
@@ -509,11 +510,9 @@ var OCdialogs = {
               $(dialogId).after(div);
               $('.twobuttons button').on('click', function() {
 
-                
-                $(this).addClass('primary');
-
                 if($(this).hasClass('back')) {
                   $('.twobuttons').hide();
+                  $('.rename').removeClass('primary');
                   $('.fourbuttons').show();
                 } else {
                   if(data === null) {
@@ -544,24 +543,38 @@ var OCdialogs = {
 						classes: 'replace',
 						
             click: function() {
+              var checked = $('#allfiles').prop('checked');
 
               if(data === null) {
                 data = self.dataQueue.shift();
                 
               }
-							if ( typeof controller.onReplace !== 'undefined') {
+              if(!checked) {
+                
+                typeof controller.onReplace !== 'undefined' && controller.onReplace(data);
+
+                var nextoriginal = self.originalQueue.shift();
+                var nextreplacement = self.replacementQueue.shift();
+                var nextdata = self.dataQueue.shift();
+                
+                $(dialogId).ocdialog('close');
+                $(dialogId).remove();
+                nextdata && showdialog(nextoriginal, nextreplacement, nextdata);
+                
+              } else {
+                var length = self.dataQueue.length;
+                
                 controller.onReplace(data);
+                for(var i=0; i < length; i++) {
+                  var value = self.dataQueue.shift();
+                  value && controller.onReplace(value);
+                }
+
+                $(dialogId).ocdialog('close');
+                $(dialogId).remove();
 							}
 
-              var nextoriginal = self.originalQueue.shift();
-              var nextreplacement = self.replacementQueue.shift();
-              var nextdata = self.dataQueue.shift();
-
-				      $(dialogId).ocdialog('close');
-				      $(dialogId).remove();
-              nextdata && showdialog(nextoriginal, nextreplacement, nextdata);
-
-						}
+            }
  
           },
           {
@@ -569,22 +582,31 @@ var OCdialogs = {
 						classes: 'skip',
 						
             click: function() {
+              var checked = $('#allfiles').prop('checked');
+
               if(data === null) {
                 data = self.dataQueue.shift();
               }
+              if(!checked) {
+                  
+								typeof controller.onSkip !== 'undefined' && controller.onSkip(data);
 
-							if ( typeof controller.onSkip !== 'undefined') {
+                var nextoriginal = self.originalQueue.shift();
+                var nextreplacement = self.replacementQueue.shift();
+                var nextdata = self.dataQueue.shift();
+                $(dialogId).ocdialog('close');
+                $(dialogId).remove();
 
-								controller.onSkip(data);
+                nextdata && showdialog(nextoriginal, nextreplacement, nextdata);
+
+                
+              } else {
+                
+                $(dialogId).ocdialog('close');
+                $(dialogId).remove();
+
 							}
-
-              var nextoriginal = self.originalQueue.shift();
-              var nextreplacement = self.replacementQueue.shift();
-              var nextdata = self.dataQueue.shift();
-              $(dialogId).ocdialog('close');
-              $(dialogId).remove();
-              nextdata && showdialog(nextoriginal, nextreplacement, nextdata);
-
+              
             }
 					}, 
           {
@@ -615,7 +637,18 @@ var OCdialogs = {
 					},
         });
 
+
 				$(dialogId).css('height','auto');
+        $('.fourbuttons').append('<input type="checkbox" id="allfiles">');
+        $('.fourbuttons').append('<label for="allfiles">'+t('core', 'All use this choice')+'</label>');
+
+        $('#allfiles').click(function() {
+          var checked = $(this).prop('checked');
+          
+          $('.fourbuttons .rename').prop('disabled', checked) 
+          
+          console.dir(checked);
+        });
 
         $(dialogId).find('#newname').on('input', function() {
           var input = $(this).val();
@@ -651,7 +684,7 @@ var OCdialogs = {
 
 			//$conflict.data('data',data);
 
-			$conflict.find('.filename').text(original.name);
+			//$conflict.find('.filename').text(original.name);
 			$originalDiv.find('.size').text(humanFileSize(original.size));
 			$originalDiv.find('.mtime').text(formatDate(original.mtime));
 			// ie sucks
@@ -660,17 +693,11 @@ var OCdialogs = {
 				$replacementDiv.find('.mtime').text(formatDate(replacement.lastModifiedDate));
 			}
 			var path = original.directory + '/' +original.name;
-			var urlSpec = {
-				file:		path,
-				x:		96,
-				y:		96,
-				c:		original.etag,
-				forceIcon:	0
-			};
-			var previewpath = Files.generatePreviewUrl(urlSpec);
-			// Escaping single quotes
-			previewpath = previewpath.replace(/'/g, "%27");
-			$originalDiv.find('.icon').css({"background-image":   "url('" + previewpath + "')"});
+			
+      
+			var previewpath = OC.MimeType.getIconUrl(replacement.type);
+      
+      $originalDiv.find('.icon').css({"background-image":   "url('" + previewpath + "')"});
 			getCroppedPreview(replacement).then(
 				function(path){
 					$replacementDiv.find('.icon').css('background-image','url(' + path + ')');
@@ -697,7 +724,7 @@ var OCdialogs = {
 				//TODO add to same mtime collection?
 			}
 
-			// set bigger size bold
+      //set bigger size bold
 			if (replacement.size && replacement.size > original.size) {
 				$replacementDiv.find('.size').css('font-weight', 'bold');
 			} else if (replacement.size && replacement.size < original.size) {
@@ -720,9 +747,9 @@ var OCdialogs = {
 					.text(t('core','read-only'))
 			}
       
-      Autorename($('.conflict .filename').text(), FileList.getCurrentDirectory()) .done(function(data) {
+      Autorename($(' .originfilename').text(), FileList.getCurrentDirectory()) .done(function(data) {
         matches = data.match(/.*\/(.*)"/);
-        $('#newname').attr({value: unescape(matchs[1].replace(/\\/g, "%"))});
+        $('#newname').attr({value: unescape(matches[1].replace(/\\/g, "%"))});
       });
 
     };
@@ -741,7 +768,10 @@ var OCdialogs = {
 		  var dialogId = '#' + dialogName;
       var $conflicts = $(dialogId + ' .conflicts');
       if(self._single) {
-        addConflict($conflicts, this.originalQueue.shift(), this.replacementQueue.shift());
+        var org =  this.originalQueue.shift();
+        var rpl = this.replacementQueue.shift();
+        $(dialogId).find('.originfilename').text(org.name);
+        addConflict($conflicts, org, rpl);
         self._single = false;
       }
 

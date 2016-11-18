@@ -86,7 +86,7 @@ OC.L10N.register(
     "read-only" : "唯讀",
     "_{count} file conflict_::_{count} file conflicts_" : ["{count} 個檔案衝突"],
     "One file conflict" : "一個檔案衝突",
-    "New Files" : "新檔案",
+    "New Files" : "本次上傳檔案",
     "Already existing files" : "已經存在的檔案",
     "Which files do you want to keep?" : "請選擇後續的操作：",
     "If you select both versions, the copied file will have a number added to its name." : "如果您同時選擇兩個版本，被複製的那個檔案名稱後面會加上編號",
@@ -240,11 +240,12 @@ OC.L10N.register(
     "Left is new file and right is origin file" : "左邊是新的檔案，右邊是原本的檔案",
     "Rename for the new file" : "為新檔案重新命名",
     "Rename" : "重新命名",
-    "Skip" : "保留",
-    "Replace" : "覆蓋",
+    "Skip" : "放棄上傳",
+    "Replace" : "取代",
     "Submit" : "確定",
     "Back" : "回上一頁",
     "This filename already exists." : "此檔案名稱已存在",
-    "file conflict": "檔案衝突"
+    "file conflict": "檔名衝突",
+    "All use this choice": "全部沿用此設定"
 },
 "nplurals=1; plural=0;");
