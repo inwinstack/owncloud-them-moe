@@ -31,15 +31,23 @@
     <h2><?php p($l->t('Quota Stats')); ?></h2>
 </div>
 
+<?php
+$trashbin = \OC_Util::getTrashbinSize();
+$versions = \OC_Util::getVersionsSize();
+$storageinfo = \OC_Helper::getStorageInfo('/');
+
+?>
+
 <div id="quota" class="section">
-	<div style="width:<?php p($_['usage_relative']);?>%"
+	<div  class="progress" style="width:<?php p($_['usage_relative'] + number_format(($trashbin/$storageinfo['total']),2) + number_format(($versions/$storageinfo['total']),2));?>%"
 		<?php if($_['usage_relative'] > 80): ?> class="quota-warning" <?php endif; ?>>
-		<p id="quotatext">
-			<?php print_unescaped($l->t('You have used <strong>%s</strong> of the available <strong>%s</strong>',
-			array($_['usage'], $_['total_space'])));?>
-		</p>
+            <p id="quotatext">&emsp;
+                
+                <?php print_unescaped($l->t('You have used <strong>%s</strong>, trashbin have used <strong>%s</strong>, versions have used <strong>%s</strong> of the available <strong>%s</strong>',array($_['usage'], OC_Helper::humanFileSize($trashbin), OC_Helper::humanFileSize($versions), $_['total_space'])));?>
+            </p>
 	</div>
-</div>
+
+
 
 <?php if ($_['enableAvatars']): ?>
 <form id="avatar" class="section" method="post" action="<?php p(\OC_Helper::linkToRoute('core.avatar.postAvatar')); ?>">
