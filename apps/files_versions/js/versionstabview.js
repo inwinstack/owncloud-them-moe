@@ -269,11 +269,8 @@
       if(!fileInfo.isDirectory() && fileInfo.attributes.path === '/') {
         return false;
       }
-      if(fileInfo.attributes.path === '/') {
-        return true;
-      }
 
-			return !fileInfo.isDirectory();
+			return true;
 		}
 	});
 
