@@ -46,7 +46,7 @@ $storageinfo = \OC_Helper::getStorageInfo('/');
                 <?php print_unescaped($l->t('You have used <strong>%s</strong>, trashbin have used <strong>%s</strong>, versions have used <strong>%s</strong> of the available <strong>%s</strong>',array($_['usage'], OC_Helper::humanFileSize($trashbin), OC_Helper::humanFileSize($versions), $_['total_space'])));?>
             </p>
 	</div>
-
+</div>
 
 
 <?php if ($_['enableAvatars']): ?>
