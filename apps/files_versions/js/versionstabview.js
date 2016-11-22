@@ -15,8 +15,8 @@
 		'<a href="{{downloadUrl}}" class="downloadVersion"><img src="{{downloadIconUrl}}" />' +
 		'<span class="versiondate has-tooltip" title="{{formattedTimestamp}}">{{relativeTimestamp}}</span>' +
 		'</a>' +
-		'<a href="#" class="revertVersion" title="{{revertLabel}}"><img src="{{revertIconUrl}}" /></a>' +
-    '{{#if deletable}}<a href="#" class="deleteVersion" title="{{deleteLabel}}"><img src="{{deleteIconUrl}}" /></a>{{/if}}' +
+		'{{#if mountType}}<a href="#" class="revertVersion" title="{{revertLabel}}"><img src="{{revertIconUrl}}" /></a>{{/if}}' +
+    '{{#if deletable}}{{#if mountType}}<a href="#" class="deleteVersion" title="{{deleteLabel}}"><img src="{{deleteIconUrl}}" /></a>{{/if}}{{/if}}' +
     '</li>';
 
 	var TEMPLATE =
@@ -37,6 +37,8 @@
 
 		_template: null,
 
+    versionCounter: 0,
+
 		$versionsContainer: null,
 
 		events: {
@@ -48,6 +50,7 @@
 		initialize: function() {
       var self = this;
 
+      this.versionCounter = 0;
 			OCA.Files.DetailTabView.prototype.initialize.apply(this, arguments);
 			this.collection = new OCA.Versions.VersionCollection();
 			this.collection.on('request', this._onRequest, this);
@@ -62,15 +65,23 @@
 		},
 
 		nextPage: function() {
+      var self = this;
 			if (this._loading || !this.collection.hasMoreResults()) {
 				return;
 			}
+
+      $.get(OC.generateUrl('/apps/files_version_cleaner/getVersionNumber'), {uid: this.collection.getFileInfo().attributes.shareOwner}, function(data) {
+        if(data.success == true) {
+          self.versionNumber = data.value;
+        }
+      });
 
 			if (this.collection.getFileInfo() && this.collection.getFileInfo().isDirectory()) {
         var subtab = new OCA.VersionCleaner.VersionCleanerView({fileInfo: this.collection.getFileInfo()});
         this.$el.html(subtab.render().$el);
 				return;
 			}
+
 			this.collection.fetchNext();
 		},
 
@@ -197,6 +208,8 @@
 		},
 
 		_onAddModel: function(model) {
+      this.versionCounter++;
+      console.dir(this.versionCounter);
 			this.$versionsContainer.append(this.itemTemplate(this._formatItem(model)));
 		},
 
@@ -227,7 +240,9 @@
 				this.collection.reset();
 			}
 		}, 
+
 		_formatItem: function(version) {
+      var self = this;
 			var timestamp = version.get('timestamp') * 1000;
 			return _.extend({
 				formattedTimestamp: OC.Util.formatDate(timestamp),
@@ -240,6 +255,8 @@
 				revertLabel: t('files_versions', 'Restore'),
 				deleteLabel: t('files_versions', 'Delete'),
         deletable: true,
+        //mountType: self.collection.getFileInfo().attributes.mountType === 'shared' ? false : true,
+        mountType: true,
 			}, version.attributes);
 		},
 
@@ -266,7 +283,8 @@
 				return false;
 			}
 
-      if(!fileInfo.isDirectory() && fileInfo.attributes.path === '/') {
+      if((!fileInfo.isDirectory() && fileInfo.attributes.path === '/') //|| fileInfo.attributes.mountType == 'shared-root'
+          ) {
         return false;
       }
 
