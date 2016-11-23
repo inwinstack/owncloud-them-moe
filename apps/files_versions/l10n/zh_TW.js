@@ -7,6 +7,8 @@ OC.L10N.register(
     "Restore" : "復原",
     "No other versions available" : "沒有其他版本了",
     "Delete" : "刪除",
+    "Preserve versions" : "保留版本區",
+    "Historic versions" : "歷史版本區",
     "More versions..." : "更多版本…"
 },
 "nplurals=1; plural=0;");

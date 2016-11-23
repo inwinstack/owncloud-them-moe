@@ -10,6 +10,8 @@
 
 (function() {
 	var TEMPLATE_ITEM =
+    '{{#if zeroVersion}}<li>{{preserve}}</li>{{/if}}'+
+    '{{#if versionNumber}}<li>{{historic}}</li>{{/if}}'+
 		'<li data-revision="{{timestamp}}">' +
 		'<img class="preview" src="{{previewUrl}}"/>' +
 		'<a href="{{downloadUrl}}" class="downloadVersion"><img src="{{downloadIconUrl}}" />' +
@@ -38,6 +40,8 @@
 		_template: null,
 
     versionCounter: 0,
+
+    versionNumber: 0,
 
 		$versionsContainer: null,
 
@@ -208,9 +212,9 @@
 		},
 
 		_onAddModel: function(model) {
-      this.versionCounter++;
       console.dir(this.versionCounter);
 			this.$versionsContainer.append(this.itemTemplate(this._formatItem(model)));
+      this.versionCounter++;
 		},
 
 		template: function(data) {
@@ -231,6 +235,7 @@
 
 		setFileInfo: function(fileInfo) {
 			if (fileInfo) {
+        this.versionCounter = 0;
         this.render();
         this.collection.setFileInfo(fileInfo);
         this.collection.reset([], {silent: true});
@@ -257,6 +262,10 @@
         deletable: true,
         //mountType: self.collection.getFileInfo().attributes.mountType === 'shared' ? false : true,
         mountType: true,
+        zeroVersion: self.versionCounter == 0 ? true : false,
+        versionNumber: self.versionCounter == self.versionNumber ? true : false,
+        preserve: t('files_versions', 'Preserve versions'),
+        historic: t('files_versions', 'Historic versions'),
 			}, version.attributes);
 		},
 
