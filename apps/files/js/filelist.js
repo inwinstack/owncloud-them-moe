@@ -1991,7 +1991,7 @@
           return;
         }
       });
-      if(remote_status || $('tbody tr').data('mounttype')) {
+      if(remote_status) {
         OC.dialogs.confirm(
         t('files', 'Are you sure to force delete external file? these files contains external file'),
         t('files', 'File Delete'),
