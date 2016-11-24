@@ -34,6 +34,7 @@ var OCdialogs = {
   dataQueue: [],
   originalQueue: [],
   replacementQueue: [],
+  newname: null,
   _fileexistsshown: false,
 	_single: true,
 
@@ -451,6 +452,7 @@ var OCdialogs = {
     var Autorename = function(originalname, directory) {
       return $.ajax({
         method: 'POST',
+        async: false,
         url: OC.filePath('files', 'ajax', 'upload.php'),
         data: {
           action: 'autorename',
@@ -458,7 +460,19 @@ var OCdialogs = {
           directory: directory
         }
       });
+    }
+
+    var getPermission = function(filename, directory) {
+      return $.ajax({
+        method: 'GET',
+        url: OC.filePath('files_sharing', 'ajax', 'sharepermission.php'),
+        data: {
+          dir: directory,
+          file: filename
+        }
+      });
     } 
+
 
     var showdialog = function(original, replacement, data) {
       $.when(OC.dialogs._getFileExistsTemplate()).then(function($tmpl) {
@@ -483,6 +497,14 @@ var OCdialogs = {
 					var $conflicts = $dlg.find('.conflicts');
           $dlg.find('.originfilename').text(original.name);
 					addConflict($conflicts, original, replacement);
+
+          if('mountType' in original) {
+          getPermission(original.name, original.directory).done(function(data) {
+            !data.writeable && $('.fourbuttons .replace').prop('disabled', true);
+
+          });
+        }
+
           
 				}
 
@@ -491,50 +513,68 @@ var OCdialogs = {
             classes: 'rename',
 
             click: function() {
-              $('.fourbuttons').hide();
-              if(!$('.twobuttons').length) {
-                var div = $('<div>').addClass('oc-dialog-buttonrow twobuttons');
-                div.append($('#newname'));
-                div.append($('<button class="back">').text(t('core', 'Back')));
-                div.append($('<button class="rename">').text(t('core', 'Submit')));
-            } else {
-
-              $('.twobuttons').show();
-            }
-              if(FileList.inList($('#newname').val())) {
-                $('.twobuttons .rename').prop('disabled',true);
-              } else {
-                $('.twobuttons .rename').prop('disabled',false);
+              if(data === null) {
+                data = self.dataQueue.shift();
               }
 
-              $(dialogId).after(div);
-              $('.twobuttons button').on('click', function() {
+              if($('#allfiles').prop('checked')) {
+                var length = self.dataQueue.length;
 
-                if($(this).hasClass('back')) {
-                  $('.twobuttons').hide();
-                  $('.rename').removeClass('primary');
-                  $('.fourbuttons').show();
-                } else {
-                  if(data === null) {
-                    data = self.dataQueue.shift();
-                  }
-                  if ( typeof controller.onRename !== 'undefined') {
-                    controller.onRename(data, $('#newname').val());
-                  
-							    }
-
-                  $('.twobuttons').remove();
-
-                  var nextoriginal = self.originalQueue.shift();
-                  var nextreplacement = self.replacementQueue.shift();
-                  var nextdata = self.dataQueue.shift();
-
-				          $(dialogId).ocdialog('close');
-				          $(dialogId).remove();
-                  nextdata && showdialog(nextoriginal, nextreplacement, nextdata);
+                controller.onAutorename(data);
+                for(var i=0; i < length; i++) {
+                  var value = self.dataQueue.shift();
+                  value && controller.onAutorename(value);
                 }
 
-              });
+                $(dialogId).ocdialog('close');
+                $(dialogId).remove();
+
+              } else {
+
+                $('.buttonrow-tooltip').hide();
+                $('.fourbuttons').hide();
+                if(!$('.twobuttons').length) {
+                  var div = $('<div>').addClass('oc-dialog-buttonrow twobuttons');
+                  div.append($('#newname'));
+                  div.append($('<button class="back">').text(t('core', 'Back')));
+                  div.append($('<button class="rename">').text(t('core', 'Submit')));
+              } else {
+
+                $('.twobuttons').show();
+              }
+                if(FileList.inList($('#newname').val())) {
+                  $('.twobuttons .rename').prop('disabled',true);
+                } else {
+                  $('.twobuttons .rename').prop('disabled',false);
+                }
+
+                $(dialogId).after(div);
+                $('.twobuttons button').on('click', function() {
+
+                  if($(this).hasClass('back')) {
+                    $('.twobuttons').hide();
+                    $('.buttonrow-tooltip').show();
+                    $('.rename').removeClass('primary');
+                    $('.fourbuttons').show();
+                  } else {
+                    if ( typeof controller.onRename !== 'undefined') {
+                      controller.onRename(data, $('#newname').val());
+                    
+                    }
+
+                    $('.twobuttons').remove();
+
+                    var nextoriginal = self.originalQueue.shift();
+                    var nextreplacement = self.replacementQueue.shift();
+                    var nextdata = self.dataQueue.shift();
+
+                    $(dialogId).ocdialog('close');
+                    $(dialogId).remove();
+                    nextdata && showdialog(nextoriginal, nextreplacement, nextdata);
+                  }
+
+                });
+              }
             }
           
           },
@@ -563,7 +603,7 @@ var OCdialogs = {
                 
               } else {
                 var length = self.dataQueue.length;
-                
+
                 controller.onReplace(data);
                 for(var i=0; i < length; i++) {
                   var value = self.dataQueue.shift();
@@ -639,15 +679,30 @@ var OCdialogs = {
 
 
 				$(dialogId).css('height','auto');
+        var tooltip = $('<div class="buttonrow-tooltip">');
+        tooltip.append($('<button id="cancel">').text(t('core', 'Cancel')));
         $('.fourbuttons').append('<input type="checkbox" id="allfiles">');
         $('.fourbuttons').append('<label for="allfiles">'+t('core', 'All use this choice')+'</label>');
+        $('.fourbuttons').after(tooltip);
+        $('.fourbuttons .cancel').hide();
+
+        $('#cancel').click(function() {
+          $('.fourbuttons .cancel').click();
+        });
+
 
         $('#allfiles').click(function() {
           var checked = $(this).prop('checked');
+          var span = $('<span>').text(t('core', 'The copying file will be rename ')+newname);
+
+          if(checked) {
+            $('.fourbuttons .rename').text(t('core', 'Auto Rename'));
+            $('.buttonrow-tooltip').append(span);
+          } else {
+            $('.fourbuttons .rename').text(t('core', 'Rename'));
+            $('.buttonrow-tooltip span').remove();
+          }
           
-          $('.fourbuttons .rename').prop('disabled', checked) 
-          
-          console.dir(checked);
         });
 
         $(dialogId).find('#newname').on('input', function() {
@@ -750,6 +805,7 @@ var OCdialogs = {
       Autorename($(' .originfilename').text(), FileList.getCurrentDirectory()) .done(function(data) {
         matches = data.match(/.*\/(.*)"/);
         $('#newname').attr({value: unescape(matches[1].replace(/\\/g, "%"))});
+        newname = unescape(matches[1].replace(/\\/g, "%"));
       });
 
     };
@@ -771,6 +827,15 @@ var OCdialogs = {
         var org =  this.originalQueue.shift();
         var rpl = this.replacementQueue.shift();
         $(dialogId).find('.originfilename').text(org.name);
+        
+        if('mountType' in org) {
+          getPermission(org.name, org.directory).done(function(data) {
+            
+            !data.writeable && $('.fourbuttons .replace').prop('disabled', true);
+
+          });
+        }
+
         addConflict($conflicts, org, rpl);
         self._single = false;
       }

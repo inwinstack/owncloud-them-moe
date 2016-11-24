@@ -31,7 +31,32 @@
 	margin-top: 10px;
 	width: 100%;
 }
+
 /* align primary button to right, other buttons to left */
+
+.buttonrow-tooltip {
+  background: white;
+	float: right;
+	position: relative;
+	bottom: 0;
+	display: block;
+	margin-top: 10px;
+	width: 100%;
+
+}
+
+
+.buttonrow-tooltip button {
+  float: right; 
+}
+
+.buttonrow-tooltip span {
+  margin-top: 10px;
+  float: left;
+}
+
+
+
 .oc-dialog-buttonrow.fourbuttons button:nth-child(1) {
 	float: left;
 }
@@ -54,7 +79,6 @@
 .oc-dialog-buttonrow.fourbuttons button:nth-child(4) {
 	float: right;
 }
-
 
 .oc-dialog-buttonrow.twobutton button:nth-child(1) {
 	float: right;
