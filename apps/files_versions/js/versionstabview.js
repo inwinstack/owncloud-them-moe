@@ -74,7 +74,11 @@
 				return;
 			}
 
-      $.get(OC.generateUrl('/apps/files_version_cleaner/getVersionNumber'), {uid: this.collection.getFileInfo().attributes.shareOwner}, function(data) {
+      $.ajax({
+        url: OC.generateUrl('/apps/files_version_cleaner/getVersionNumber'),
+        data: {uid: this.collection.getFileInfo().attributes.shareOwner}, 
+        async: false,
+      }).done( function(data) {
         if(data.success == true) {
           self.versionNumber = data.value;
         }
@@ -127,6 +131,7 @@
 						// temp dummy, until we can do a PROPFIND
 						etag: versionModel.get('id') + versionModel.get('timestamp')
 					});
+          self.versionCounter = 0;
 				},
 
 				error: function() {
@@ -177,6 +182,7 @@
 						// temp dummy, until we can do a PROPFIND
 						etag: versionModel.get('id') + versionModel.get('timestamp')
 					});
+          self.versionCounter = 0;
 				},
 
 				error: function() {
@@ -212,7 +218,6 @@
 		},
 
 		_onAddModel: function(model) {
-      console.dir(this.versionCounter);
 			this.$versionsContainer.append(this.itemTemplate(this._formatItem(model)));
       this.versionCounter++;
 		},
@@ -292,8 +297,7 @@
 				return false;
 			}
 
-      if((!fileInfo.isDirectory() && fileInfo.attributes.path === '/') //|| fileInfo.attributes.mountType == 'shared-root'
-          ) {
+      if(!fileInfo.isDirectory() && fileInfo.attributes.path === '/' || fileInfo.attributes.mountType == 'shared-root' || fileInfo.attributes.mountType == 'shared') {
         return false;
       }
 
