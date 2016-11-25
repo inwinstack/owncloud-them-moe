@@ -228,14 +228,14 @@
         }));
       }
 
-      this.versionCounter++;
-
       if(this.versionCounter < this.versionNumber) {
         this.$versionsContainer.find('#historic').before(this.itemTemplate(this._formatItem(model)));
       }
       else {
         this.$versionsContainer.find('#hideversion').before(this.itemTemplate(this._formatItem(model)));
       }
+
+      this.versionCounter++;
 		},
 
 		template: function(data) {
