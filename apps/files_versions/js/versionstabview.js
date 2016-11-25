@@ -9,16 +9,19 @@
  */
 
 (function() {
+	var TEMPLATE_ITEM_INIT =
+    '<li id=preserve>{{preserve}}</li>'+
+    '<li id=historic>{{historic}}</li>'+
+    '<li id=hideversion class=hidden></li>';
+
 	var TEMPLATE_ITEM =
-    '{{#if zeroVersion}}<li>{{preserve}}</li>{{/if}}'+
-    '{{#if versionNumber}}<li>{{historic}}</li>{{/if}}'+
 		'<li data-revision="{{timestamp}}">' +
 		'<img class="preview" src="{{previewUrl}}"/>' +
 		'<a href="{{downloadUrl}}" class="downloadVersion"><img src="{{downloadIconUrl}}" />' +
 		'<span class="versiondate has-tooltip" title="{{formattedTimestamp}}">{{relativeTimestamp}}</span>' +
 		'</a>' +
-		'{{#if mountType}}<a href="#" class="revertVersion" title="{{revertLabel}}"><img src="{{revertIconUrl}}" /></a>{{/if}}' +
-    '{{#if deletable}}{{#if mountType}}<a href="#" class="deleteVersion" title="{{deleteLabel}}"><img src="{{deleteIconUrl}}" /></a>{{/if}}{{/if}}' +
+		'<a href="#" class="revertVersion" title="{{revertLabel}}"><img src="{{revertIconUrl}}" /></a>' +
+    '{{#if deletable}}<a href="#" class="deleteVersion" title="{{deleteLabel}}"><img src="{{deleteIconUrl}}" /></a>{{/if}}' +
     '</li>';
 
 	var TEMPLATE =
@@ -218,8 +221,21 @@
 		},
 
 		_onAddModel: function(model) {
-			this.$versionsContainer.append(this.itemTemplate(this._formatItem(model)));
+      if(this.versionCounter == 0) {
+        this.$versionsContainer.append(this.itemTemplateInit({
+          preserve: t('files_versions', 'Preserve versions'),
+          historic: t('files_versions', 'Historic versions')
+        }));
+      }
+
       this.versionCounter++;
+
+      if(this.versionCounter < this.versionNumber) {
+        this.$versionsContainer.find('#historic').before(this.itemTemplate(this._formatItem(model)));
+      }
+      else {
+        this.$versionsContainer.find('#hideversion').before(this.itemTemplate(this._formatItem(model)));
+      }
 		},
 
 		template: function(data) {
@@ -228,6 +244,14 @@
 			}
 
 			return this._template(data);
+		},
+
+		itemTemplateInit: function(data) {
+			if (!this._itemTemplateInit) {
+				this._itemTemplateInit = Handlebars.compile(TEMPLATE_ITEM_INIT);
+			}
+
+			return this._itemTemplateInit(data);
 		},
 
 		itemTemplate: function(data) {
@@ -265,12 +289,6 @@
 				revertLabel: t('files_versions', 'Restore'),
 				deleteLabel: t('files_versions', 'Delete'),
         deletable: true,
-        //mountType: self.collection.getFileInfo().attributes.mountType === 'shared' ? false : true,
-        mountType: true,
-        zeroVersion: self.versionCounter == 0 ? true : false,
-        versionNumber: self.versionCounter == self.versionNumber ? true : false,
-        preserve: t('files_versions', 'Preserve versions'),
-        historic: t('files_versions', 'Historic versions'),
 			}, version.attributes);
 		},
 
