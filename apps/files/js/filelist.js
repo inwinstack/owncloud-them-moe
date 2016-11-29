@@ -1028,7 +1028,7 @@
 				simpleSize = humanFileSize(parseInt(fileData.size, 10), true);
 				sizeColor = Math.round(160-Math.pow((fileData.size/(1024*1024)),2));
 			} else {
-				simpleSize = t('files', 'Pending');
+				simpleSize = t('files', '--');
 			}
 
 			td = $('<td></td>').attr({
@@ -1051,7 +1051,7 @@
 				text = OC.Util.relativeModifiedDate(mtime);
 			} else {
 				formatted = t('files', 'Unable to determine date');
-				text = '?';
+				text = '--';
 			}
 			td = $('<td></td>').attr({ "class": "date" });
 			td.append($('<span></span>').attr({
