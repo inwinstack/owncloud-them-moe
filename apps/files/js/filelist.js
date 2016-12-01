@@ -1969,6 +1969,114 @@
 			});
 		},
 
+  /**
+   * these three functions is update confirm dialog
+   *
+   **/
+  $messageForceDeleteTemplate : null,
+
+    confirm_forcedelete:function(text1, text2, title, callback, modal) {
+		return this.message_forcedelete(
+			text1,
+      text2,
+			title,
+			'notice',
+			OCdialogs.YES_NO_BUTTONS,
+			callback,
+			modal
+		);
+	},
+  
+  message_forcedelete:function(content1, content2, title, dialogType, buttons, callback, modal) {
+		return $.when(this._getMessageForceDeleteTemplate()).then(function($tmpl) {
+			var dialogName = 'oc-dialog-' + OCdialogs.dialogsCounter + '-content';
+			var dialogId = '#' + dialogName;
+			var $dlg = $tmpl.octemplate({
+				dialog_name: dialogName,
+				title: title,
+				message1: content1,
+				message2: content2,
+				type: dialogType
+			});
+			if (modal === undefined) {
+				modal = false;
+			}
+			$('body').append($dlg);
+			var buttonlist = [];
+			switch (buttons) {
+			case OCdialogs.YES_NO_BUTTONS:
+				buttonlist = [{
+					text: t('core', 'No'),
+					click: function(){
+						if (callback !== undefined) {
+							callback(false);
+						}
+						$(dialogId).ocdialog('close');
+					}
+				},
+				{
+					text: t('core', 'Yes'),
+					click: function(){
+						if (callback !== undefined) {
+							callback(true);
+						}
+						$(dialogId).ocdialog('close');
+					},
+					defaultButton: true
+				}];
+				break;
+			case OCdialogs.OK_BUTTON:
+				var functionToCall = function() {
+					$(dialogId).ocdialog('close');
+					if(callback !== undefined) {
+						callback();
+					}
+				};
+				buttonlist[0] = {
+					text: t('core', 'Ok'),
+					click: functionToCall,
+					defaultButton: true
+				};
+				break;
+			}
+
+			$(dialogId).ocdialog({
+				closeOnEscape: true,
+				modal: modal,
+				buttons: buttonlist
+			});
+			OCdialogs.dialogsCounter++;
+		})
+		.fail(function(status, error) {
+			// If the method is called while navigating away from
+			// the page, we still want to deliver the message.
+			if(status === 0) {
+				alert(title + ': ' + content);
+			} else {
+				alert(t('core', 'Error loading message template: {error}', {error: error}));
+			}
+		});
+	},
+
+
+
+    _getMessageForceDeleteTemplate: function() {
+		var defer = $.Deferred();
+		if(!this.$messageForceDeleteTemplate) {
+			var self = this;
+			$.get(OC.generateUrl('themes/MOE/apps/files/templates/message.html').replace(/index.php\//g, ''), function(tmpl) {
+				self.$messageForceDeleteTemplate = $(tmpl);
+				defer.resolve(self.$messageForceDeleTteemplate);
+			})
+			.fail(function(jqXHR, textStatus, errorThrown) {
+				defer.reject(jqXHR.status, errorThrown);
+			});
+		} else {
+			defer.resolve(this.$messageForceDeleteTemplate);
+		}
+		return defer.promise();
+	},
+
 		/**
 		 * Delete the given files from the given dir
 		 * @param files file names list (without path)
@@ -1992,9 +2100,10 @@
         }
       });
       if(remote_status) {
-        OC.dialogs.confirm(
-        t('files', 'Are you sure to force delete external file? these files contains external file'),
-        t('files', 'File Delete'),
+        this.confirm_forcedelete(
+        t('files', 'If force delete, you will not be able to restore the file or folder in this trashbin.'),
+        t('files','Are you sure to force delete this file or folder ?'),
+        t('files', 'Force Delete?'),
         function(dialogValue) {
           if(dialogValue) {
 

@@ -118,6 +118,9 @@ OC.L10N.register(
     "Text file" : "新增文字檔",
     "New text file.txt" : "新文字檔.txt",
     "Are you sure to force delete external file? these files contains external file": "你確定要強制刪除外部檔案？ 這些檔案包含外部儲存的檔案",
-    "File Delete": "檔案刪除"
+    "File Delete": "檔案刪除",
+    "If force delete, you will not be able to restore the file or folder in this trashbin.": "若永久刪除，您將無法於本服務回收桶還原檔案或資料夾。若有還原之需求，請至原掛載之外部雲端個人空間垃圾桶還原。",
+    "Are you sure to force delete this file or folder ?": "您確定要永久刪除該檔案或資料夾嗎?",
+    "Force Delete?": "確定要永久刪除？"
 },
 "nplurals=1; plural=0;");
