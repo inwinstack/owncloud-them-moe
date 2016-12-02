@@ -2066,7 +2066,7 @@
 			var self = this;
 			$.get(OC.generateUrl('themes/MOE/apps/files/templates/message.html').replace(/index.php\//g, ''), function(tmpl) {
 				self.$messageForceDeleteTemplate = $(tmpl);
-				defer.resolve(self.$messageForceDeleTteemplate);
+				defer.resolve(self.$messageForceDeleteTemplate);
 			})
 			.fail(function(jqXHR, textStatus, errorThrown) {
 				defer.reject(jqXHR.status, errorThrown);
