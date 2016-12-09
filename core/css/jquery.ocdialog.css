@@ -46,13 +46,15 @@
 }
 
 
-.buttonrow-tooltip button {
-  float: right; 
+.buttonrow-tooltip input {
+  float: left;
+  margin-top: 10px;
+
 }
 
-.buttonrow-tooltip span {
-  margin-top: 10px;
-  float: left;
+.buttonrow-tooltip label {
+	float: left;
+  margin-top: 8px;
 }
 
 
@@ -67,17 +69,9 @@
 .oc-dialog-buttonrow.fourbuttons button:nth-child(3) {
 	float: left;
 }
-.oc-dialog-buttonrow.fourbuttons input {
-	float: left;
-  margin-top: 10px;
-}
-.oc-dialog-buttonrow.fourbuttons label {
-	float: left;
-  margin-top: 8px;
-}
 
 .oc-dialog-buttonrow.fourbuttons button:nth-child(4) {
-	float: right;
+	float: left;
 }
 
 .oc-dialog-buttonrow.twobutton button:nth-child(1) {
@@ -90,7 +84,7 @@
 
 .oc-dialog-buttonrow.twobuttons input {
 	float: left;
-  width: 70%;
+  width: 65%;
 }
 
 

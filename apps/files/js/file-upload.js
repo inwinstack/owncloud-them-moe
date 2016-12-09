@@ -239,12 +239,13 @@ OC.Upload = {
 		});
 		if (conflicts.length) {
 			// wait for template loading
-      OC.dialogs._fileexistsshown = false;
-			OC.dialogs.fileexists(null, null, null, OC.Upload).done(function() {
-				_.each(conflicts, function(conflictData) {
+      //OC.dialogs._fileexistsshown = false;
+			//OC.dialogs.fileexists(null, null, null, OC.Upload).done(function() {
+				OC.dialogs.conflictLength = conflicts.length;
+        _.each(conflicts, function(conflictData) {
 					OC.dialogs.fileexists(conflictData[1], conflictData[0], conflictData[1].files[0], OC.Upload);
 				});
-			});
+			//});
 		}
 
 		// upload non-conflicting files
