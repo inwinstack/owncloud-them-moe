@@ -788,7 +788,7 @@ var OCdialogs = {
 				$replacementDiv.find('.size').text(t('core', 'Size : ')+humanFileSize(replacement.size));
 				//$replacementDiv.find('.mtime').text(formatDate(replacement.lastModifiedDate));
 
-        var rpldate = dateHandler(new Date(replacement.lastModifiedDate));
+        var rpldate = dateHandler(new Date());
 				$replacementDiv.find('.mtime .day').text(t('core', 'Day : ')+rpldate.day);
 				$replacementDiv.find('.mtime .time').text(t('core', 'Time : ')+rpldate.time);
 			}
