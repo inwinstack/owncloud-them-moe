@@ -2064,7 +2064,7 @@
 		var defer = $.Deferred();
 		if(!this.$messageForceDeleteTemplate) {
 			var self = this;
-			$.get(OC.generateUrl('themes/MOE/apps/files/templates/message.html').replace(/index.php\//g, ''), function(tmpl) {
+			$.get(OC.generateUrl('themes/MOE/core/templates/message.html').replace(/index.php\//g, ''), function(tmpl) {
 				self.$messageForceDeleteTemplate = $(tmpl);
 				defer.resolve(self.$messageForceDeleteTemplate);
 			})
