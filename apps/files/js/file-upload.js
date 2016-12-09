@@ -192,6 +192,20 @@ OC.Upload = {
 			console.log(data);
 		}
 	},
+  onRename:function(data, name) {
+		this.log('rename', null, data);
+		if (data.data) {
+			data.data.append('resolution', 'rename');
+			data.data.append('new_name', name);
+		} else {
+			if (!data.formData) {
+				data.formData = {};
+			}
+			addFormData(data.formData, {resolution: 'rename', new_name: name});
+		}
+		data.submit();
+	},
+
 	/**
 	 * checks the list of existing files prior to uploading and shows a simple dialog to choose
 	 * skip all, replace all or choose which files to keep
@@ -224,24 +238,14 @@ OC.Upload = {
 			return true;
 		});
 		if (conflicts.length) {
-            $.each(conflicts, function(index, conflictData) {
-                
-                if(window.location.href.match(/.*\/s\/.*/) || !(parseInt($('input#permissions').val()) & OC.PERMISSION_UPDATE)) {
-
-			        OC.dialogs.fileexists(conflictData[1], conflictData[0], conflictData[1].files[0], OC.Upload, true).done(function() {
-                        $('#checkbox-allnewfiles').prop('checked', true);
-                        $('#checkbox_replacement_'+index).prop('checked', true);
-                        $('#checkbox-allexistingfiles').prop('checked', true);
-                        $('#checkbox_original_'+index).prop('checked', true);
-
-                   });
-
-                } else {
-                    OC.dialogs.fileexists(conflictData[1], conflictData[0], conflictData[1].files[0], OC.Upload, false);
-                
-                }
-                
-			});
+			// wait for template loading
+      //OC.dialogs._fileexistsshown = false;
+			//OC.dialogs.fileexists(null, null, null, OC.Upload).done(function() {
+				OC.dialogs.conflictLength = conflicts.length;
+        _.each(conflicts, function(conflictData) {
+					OC.dialogs.fileexists(conflictData[1], conflictData[0], conflictData[1].files[0], OC.Upload);
+				});
+			//});
 		}
 
 		// upload non-conflicting files

@@ -31,6 +31,14 @@ var OCdialogs = {
 	OK_BUTTONS:		71,
 	// used to name each dialog
 	dialogsCounter: 0,
+	conflictLength: null,
+  dataQueue: [],
+  originalQueue: [],
+  replacementQueue: [],
+  newname: null,
+  allfiles_checked: false,
+  _fileexistsshown: false,
+
 	/**
 	* displays alert dialog
 	* @param text content of dialog
@@ -76,6 +84,7 @@ var OCdialogs = {
 			modal
 		);
 	},
+
 	/**
 	 * displays prompt dialog
 	 * @param text content of dialog
@@ -305,7 +314,7 @@ var OCdialogs = {
 			}
 		});
 	},
-	_fileexistsshown: false,
+
 	/**
 	 * Displays file exists dialog
 	 * @param {object} data upload object
@@ -314,7 +323,7 @@ var OCdialogs = {
 	 * @param {object} controller with onCancel, onSkip, onReplace and onRename methods
 	 * @return {Promise} jquery promise that resolves after the dialog template was loaded
 	*/
-	fileexists:function(data, original, replacement, controller, disabled) {
+	fileexists:function(data, original, replacement, controller) {
 		var self = this;
 		var dialogDeferred = new $.Deferred();
 
@@ -442,50 +451,351 @@ var OCdialogs = {
 			canvas.height = H2;
 			canvas.getContext("2d").putImageData(img2, 0, 0);
 		};
+   
+    var Autorename = function(originalname, directory) {
+      return $.ajax({
+        method: 'POST',
+        async: false,
+        url: OC.filePath('files', 'ajax', 'upload.php'),
+        data: {
+          action: 'autorename',
+          originalname: originalname,
+          directory: directory
+        }
+      });
+    }
 
-		var addConflict = function($conflicts, original, replacement) {
+    var getPermission = function(filename, directory) {
+      return $.ajax({
+        method: 'GET',
+        url: OC.filePath('files_sharing', 'ajax', 'sharepermission.php'),
+        data: {
+          dir: directory,
+          file: filename
+        }
+      });
+    } 
+
+
+    var showdialog = function(original, replacement, data) {
+      $.when(OC.dialogs._getFileExistsTemplate()).then(function($tmpl) {
+
+        var dialogName = 'oc-dialog-fileexists-content';
+		    var dialogId = '#' + dialogName;
+				var title = t('core','file conflict');
+				var $dlg = $tmpl.octemplate({
+					dialog_name: dialogName,
+					title: title,
+					type: 'fileexists',
+          
+					allfiles: t('core','Apply this action to all files'),
+          allnewfiles: t('core','New Files'),
+					allexistingfiles: t('core','Already existing files'),
+					why: t('core','Which files do you want to keep?'),
+          rename: t('core', 'Rename')
+				});
+				$('body').append($dlg);
+        
+				if (original && replacement) {
+					var $conflicts = $dlg.find('.conflicts');
+          $dlg.find('.originfilename').text(original.name);
+					addConflict($conflicts, original, replacement);
+
+          if('mountType' in original) {
+            getPermission(original.name, original.directory).done(function(data) {
+              !data.writeable && $('.fourbuttons .replace').prop('disabled', true);
+
+            });
+          }
+
+          
+				}       
+        /**
+         * modifed dialog when allfiles checked and click rename func
+         * @Dialogaram
+         * @data
+         **/
+
+        var renamefunc = function(Dialogparam, data) {
+          $('.buttonrow-tooltip').hide();
+          $('.fourbuttons').hide();
+
+          if(!$('.twobuttons').length) {
+            
+            var div = $('<div>').addClass('oc-dialog-buttonrow twobuttons');
+
+            div.append($('#newname'));
+
+            !Dialogparam.allfiles_checked && div.append($('<button class="back">').text(t('core', 'Back')));
+            Dialogparam.allfiles_checked && div.append($('<button class="cancel">').text(t('core', 'Skip')));
+            div.append($('<button class="rename">').text(t('core', 'Submit')));
+          } else {
+
+            $('.twobuttons').show();
+
+          }
+
+          if(FileList.inList($('#newname').val())) {
+            
+            $('.twobuttons .rename').prop('disabled',true);
+          
+          } else {
+            
+            $('.twobuttons .rename').prop('disabled',false);
+         
+          }
+
+          $(dialogId).after(div);
+          $('.twobuttons button').on('click', function() {
+
+            if($(this).hasClass('back')) {
+              $('.twobuttons').hide();
+              Dialogparam.conflictLength > 0 && $('.buttonrow-tooltip').show();
+              $('.rename').removeClass('primary');
+              $('.fourbuttons').show();
+            } else if($(this).hasClass('rename')){
+              if ( typeof controller.onRename !== 'undefined') {
+                controller.onRename(data, $('#newname').val());
+              }
+
+              $('.twobuttons').remove();
+
+              var nextoriginal = Dialogparam.originalQueue.shift();
+              var nextreplacement = Dialogparam.replacementQueue.shift();
+              var nextdata = Dialogparam.dataQueue.shift();
+
+              $(dialogId).ocdialog('close');
+              $(dialogId).remove();
+              nextdata && showdialog(nextoriginal, nextreplacement, nextdata);
+            } else {
+              if ( typeof controller.onCancel !== 'undefined') {
+								controller.onCancel(data);
+							}
+							$(dialogId).ocdialog('close');
+              $(dialogId).remove();
+              Dialogparam.dataQueue = [];
+              Dialogparam.originalQueue = [];
+              Dialogparam.replacementQueue = [];
+            
+            }
+
+          });
+        }
+
+
+				var buttonlist = [{
+            text: t('core', 'Rename'),
+            classes: 'rename',
+
+            click: function() {
+
+              renamefunc(self, data);
+            }
+          
+          },
+          {
+						text: t('core', 'Auto Rename'),
+						classes: 'autorename',
+						click: function() {
+              var checked = $('#allfiles').prop('checked');
+
+              if(checked) {
+                var length = self.dataQueue.length;
+
+                controller.onAutorename(data);
+                for(var i=0; i < length; i++) {
+                  var value = self.dataQueue.shift();
+                  value && controller.onAutorename(value);
+                }
+
+                $(dialogId).ocdialog('close');
+                $(dialogId).remove();
+
+
+              } else { 
+                typeof controller.onAutorename !== 'undefined' && controller.onAutorename(data);
+
+                var nextoriginal = self.originalQueue.shift();
+                var nextreplacement = self.replacementQueue.shift();
+                var nextdata = self.dataQueue.shift();
+                
+                $(dialogId).ocdialog('close');
+                $(dialogId).remove();
+                nextdata && showdialog(nextoriginal, nextreplacement, nextdata);
+              } 
+						}
+					},
+          {
+            text: t('core', 'Replace'),
+						classes: 'replace',
+						
+            click: function() {
+              var checked = $('#allfiles').prop('checked');
+
+              if(!checked) {
+                
+                typeof controller.onReplace !== 'undefined' && controller.onReplace(data);
+
+                var nextoriginal = self.originalQueue.shift();
+                var nextreplacement = self.replacementQueue.shift();
+                var nextdata = self.dataQueue.shift();
+                
+                $(dialogId).ocdialog('close');
+                $(dialogId).remove();
+                nextdata && showdialog(nextoriginal, nextreplacement, nextdata);
+                
+              } else {
+                var length = self.dataQueue.length;
+
+                controller.onReplace(data);
+                for(var i=0; i < length; i++) {
+                  var value = self.dataQueue.shift();
+                  value && controller.onReplace(value);
+                }
+
+                $(dialogId).ocdialog('close');
+                $(dialogId).remove();
+							}
+
+            }
+ 
+          },
+          {
+						text: t('core', 'Skip'),
+						classes: 'skip',
+						
+            click: function() {
+              var checked = $('#allfiles').prop('checked');
+
+              if(data === null) {
+                data = self.dataQueue.shift();
+              }
+              if(!checked) {
+                  
+								typeof controller.onSkip !== 'undefined' && controller.onSkip(data);
+
+                var nextoriginal = self.originalQueue.shift();
+                var nextreplacement = self.replacementQueue.shift();
+                var nextdata = self.dataQueue.shift();
+                $(dialogId).ocdialog('close');
+                $(dialogId).remove();
+
+                nextdata && showdialog(nextoriginal, nextreplacement, nextdata);
+
+                
+              } else {
+                
+                $(dialogId).ocdialog('close');
+                $(dialogId).remove();
+                self.dataQueue = [];
+                self.originalQueue = [];
+                self.replacementQueue = [];
+
+							}
+              
+            }
+					}];
+				$(dialogId).ocdialog({
+					width: 500,
+					closeOnEscape: true,
+					modal: true,
+					buttons: buttonlist,
+					closeButton: null,
+					close: function() {
+							self._fileexistsshown = false;
+							//$(this).ocdialog('destroy').remove();
+					},
+        });
+
+
+				$(dialogId).css('height','auto');
+        var tooltip = $('<div class="buttonrow-tooltip">');
+        
+        tooltip.append('<input type="checkbox" id="allfiles">');
+        tooltip.append('<label for="allfiles">'+t('core', 'All use this choice')+'</label>');
+        $('.fourbuttons').after(tooltip);
+
+        self.conflictLength === 1 && $('.buttonrow-tooltip').hide();
+        self.conflictLength--;
+        if(self.allfiles_checked) {
+          renamefunc(self, data);
+        }
+
+     
+        $('#allfiles').click(function() {
+          var checked = $(this).prop('checked');
+          
+          self.allfiles_checked  = checked;
+
+        });
+
+        $(dialogId).find('#newname').on('input', function() {
+          var input = $(this).val();
+
+          if(FileList.inList(input)) {
+           // $(this).after($('<small class="error-tooltip">').css({'color':'red', 'padding-left' :'148px'}).text(t('core', 'This filename already exists.'))).after('<br>');
+            $(this).css({'color':'red', 'border-color': 'red'});
+            $('.twobuttons .rename').prop('disabled',true);
+          } else {
+            $('th br').remove();
+            //$('.error-tooltip').remove();
+            $(this).css({'color': '', 'border-color': ''});
+            $('.twobuttons .rename').prop('disabled',false);
+          }
+
+        });
+        
+        dialogDeferred.resolve();
+			})
+			.fail(function() {
+				dialogDeferred.reject();
+				alert(t('core', 'Error loading file exists template'));
+			});
+
+    };
+  
+
+    var dateHandler = function(date) {
+      var year = ''+date.getFullYear();
+      var month = (date.getMonth()+1) < 10 ? '0'+(date.getMonth()+1) : ''+(date.getMonth()+1);
+      var day = date.getDate() <10 ? '0' + date.getDate() : ''+date.getDate();
+      var hour = (date.getHours()+1) < 10 ? '0'+(date.getHours()+1) : ''+(date.getHours()+1);
+      var minute = date.getMinutes() < 10 ? '0'+date.getMinutes() : ''+date.getMinutes();
+      var sec = date.getSeconds() < 10 ? '0'+date.getSeconds() : ''+date.getSeconds();
+      
+      return {
+        'day': year+'/'+month+'/'+day,
+        'time': hour+':'+minute+':'+sec
+      };
+
+    }
+
+    var addConflict = function($conflicts, original, replacement) {
 
 			var $conflict = $conflicts.find('.template').clone().removeClass('template').addClass('conflict');
 			var $originalDiv = $conflict.find('.original');
 			var $replacementDiv = $conflict.find('.replacement');
 
-			$conflict.data('data',data);
 
-			$conflict.find('.filename').text(original.name);
-			$originalDiv.find('.size').text(humanFileSize(original.size));
-			$originalDiv.find('.mtime').text(formatDate(original.mtime));
+			$originalDiv.find('.size').text(t('core', 'Size : ')+humanFileSize(original.size));
+			//$originalDiv.find('.mtime').text(formatDate(original.mtime));
+      var oridate = dateHandler(new Date(original.mtime));
+      $originalDiv.find('.mtime .day').text(t('core', 'Day : ')+oridate.day); 
+      $originalDiv.find('.mtime .time').text(t('core', 'Time : ')+oridate.time); 
+
 			// ie sucks
-			if (replacement.size && replacement.lastModifiedDate) {
-				$replacementDiv.find('.size').text(humanFileSize(replacement.size));
-				$replacementDiv.find('.mtime').text(formatDate(replacement.lastModifiedDate));
+			if (replacement.lastModifiedDate) {
+				$replacementDiv.find('.size').text(t('core', 'Size : ')+humanFileSize(replacement.size));
+				//$replacementDiv.find('.mtime').text(formatDate(replacement.lastModifiedDate));
+
+        var rpldate = dateHandler(new Date(replacement.lastModifiedDate));
+				$replacementDiv.find('.mtime .day').text(t('core', 'Day : ')+rpldate.day);
+				$replacementDiv.find('.mtime .time').text(t('core', 'Time : ')+rpldate.time);
 			}
-			var path = original.directory + '/' +original.name;
-			var urlSpec = {
-				file:		path,
-				x:		96,
-				y:		96,
-				c:		original.etag,
-				forceIcon:	0
-			};
-			var previewpath = Files.generatePreviewUrl(urlSpec);
-			// Escaping single quotes
-			previewpath = previewpath.replace(/'/g, "%27");
-			$originalDiv.find('.icon').css({"background-image":   "url('" + previewpath + "')"});
-			getCroppedPreview(replacement).then(
-				function(path){
-					$replacementDiv.find('.icon').css('background-image','url(' + path + ')');
-				}, function(){
-					path = OC.MimeType.getIconUrl(replacement.type);
-					$replacementDiv.find('.icon').css('background-image','url(' + path + ')');
-				}
-			);
-			// connect checkboxes with labels
-			var checkboxId = $conflicts.find('.conflict').length;
-			$originalDiv.find('input:checkbox').attr('id', 'checkbox_original_'+checkboxId);
-			$replacementDiv.find('input:checkbox').attr('id', 'checkbox_replacement_'+checkboxId);
 
 			$conflicts.append($conflict);
-
+            
+/*
 			//set more recent mtime bold
 			// ie sucks
 			if (replacement.lastModifiedDate && replacement.lastModifiedDate.getTime() > original.mtime) {
@@ -496,7 +806,7 @@ var OCdialogs = {
 				//TODO add to same mtime collection?
 			}
 
-			// set bigger size bold
+      //set bigger size bold
 			if (replacement.size && replacement.size > original.size) {
 				$replacementDiv.find('.size').css('font-weight', 'bold');
 			} else if (replacement.size && replacement.size < original.size) {
@@ -504,7 +814,7 @@ var OCdialogs = {
 			} else {
 				//TODO add to same size collection?
 			}
-
+*/
 			//TODO show skip action for files with same size and mtime in bottom row
 
 			// always keep readonly files
@@ -518,148 +828,35 @@ var OCdialogs = {
 				$originalDiv.find('.message')
 					.text(t('core','read-only'))
 			}
-		};
+      
+      Autorename($(' .originfilename').text(), FileList.getCurrentDirectory()) .done(function(data) {
+        matches = data.match(/.*\/(.*)"/);
+        $('#newname').attr({value: unescape(matches[1].replace(/\\/g, "%"))});
+        newname = unescape(matches[1].replace(/\\/g, "%"));
+      });
+
+    };
 		//var selection = controller.getSelection(data.originalFiles);
 		//if (selection.defaultAction) {
 		//	controller[selection.defaultAction](data);
 		//} else {
-		var dialogName = 'oc-dialog-fileexists-content';
+    var dialogName = 'oc-dialog-fileexists-content';
 		var dialogId = '#' + dialogName;
-		if (this._fileexistsshown) {
-			// add conflict
+    if(self._fileexistsshown) {
+      this.dataQueue.push(data);
+      this.originalQueue.push(original);
+      this.replacementQueue.push(replacement);
 
-			var $conflicts = $(dialogId+ ' .conflicts');
-			addConflict($conflicts, original, replacement);
+    } else {
+      
+      this._fileexistsshown = true;
+      this.allfiles_checked = false;
+      showdialog(original,replacement,data);
+    }
+    
+    
 
-			var count = $(dialogId+ ' .conflict').length;
-			var title = n('core',
-							'{count} file conflict',
-							'{count} file conflicts',
-							count,
-							{count:count}
-						);
-			$(dialogId).parent().children('.oc-dialog-title').text(title);
 
-			//recalculate dimensions
-			$(window).trigger('resize');
-			dialogDeferred.resolve();
-		} else {
-			//create dialog
-			this._fileexistsshown = true;
-			$.when(this._getFileExistsTemplate()).then(function($tmpl) {
-				var title = t('core','One file conflict');
-				var $dlg = $tmpl.octemplate({
-					dialog_name: dialogName,
-					title: title,
-					type: 'fileexists',
-
-					allnewfiles: t('core','New Files'),
-					allexistingfiles: t('core','Already existing files'),
-
-					why: t('core','Which files do you want to keep?'),
-					what: t('core','If you select both versions, the copied file will have a number added to its name.')
-				});
-				$('body').append($dlg);
-
-				if (original && replacement) {
-					var $conflicts = $dlg.find('.conflicts');
-					addConflict($conflicts, original, replacement);
-				}
-
-				var buttonlist = [{
-						text: t('core', 'Cancel'),
-						classes: 'cancel',
-						click: function(){
-							if ( typeof controller.onCancel !== 'undefined') {
-								controller.onCancel(data);
-							}
-							$(dialogId).ocdialog('close');
-						}
-					},
-					{
-						text: t('core', 'Continue'),
-						classes: 'continue',
-						
-                        click: function(){
-							if ( typeof controller.onContinue !== 'undefined') {
-								controller.onContinue($(dialogId + ' .conflict'));
-							}
-							$(dialogId).ocdialog('close');
-						}
-                        
-					}];
-
-				$(dialogId).ocdialog({
-					width: 500,
-					closeOnEscape: true,
-					modal: true,
-					buttons: buttonlist,
-					closeButton: null,
-					close: function() {
-							self._fileexistsshown = false;
-							$(this).ocdialog('destroy').remove();
-						}
-				});
-
-				$(dialogId).css('height','auto');
-                
-                if(!disabled) {
-                    //add checkbox toggling actionsi
-                    $(dialogId).find('.allnewfiles').on('click', function() {
-                        var $checkboxes = $(dialogId).find('.conflict .replacement input[type="checkbox"]');
-                        $checkboxes.prop('checked', $(this).prop('checked'));
-                    });
-                    
-                    $(dialogId).find('.allexistingfiles').on('click', function() {
-                        var $checkboxes = $(dialogId).find('.conflict .original:not(.readonly) input[type="checkbox"]');
-                        $checkboxes.prop('checked', $(this).prop('checked'));
-                    });
-                    
-                    $(dialogId).find('.conflicts').on('click', '.replacement,.original:not(.readonly)', function() {
-                        var $checkbox = $(this).find('input[type="checkbox"]');
-                        $checkbox.prop('checked', !$checkbox.prop('checked'));
-                    });
-                    $(dialogId).find('.conflicts').on('click', '.replacement input[type="checkbox"],.original:not(.readonly) input[type="checkbox"]', function() {
-                        var $checkbox = $(this);
-                        $checkbox.prop('checked', !$checkbox.prop('checked'));
-                    });
-                }
-                
-				//update counters
-				$(dialogId).on('click', '.replacement,.allnewfiles', function() {
-					var count = $(dialogId).find('.conflict .replacement input[type="checkbox"]:checked').length;
-					if (count === $(dialogId+ ' .conflict').length) {
-						$(dialogId).find('.allnewfiles').prop('checked', true);
-						$(dialogId).find('.allnewfiles + .count').text(t('core','(all selected)'));
-					} else if (count > 0) {
-						$(dialogId).find('.allnewfiles').prop('checked', false);
-						$(dialogId).find('.allnewfiles + .count').text(t('core','({count} selected)',{count:count}));
-					} else {
-						$(dialogId).find('.allnewfiles').prop('checked', false);
-						$(dialogId).find('.allnewfiles + .count').text('');
-					}
-				});
-				$(dialogId).on('click', '.original,.allexistingfiles', function(){
-					var count = $(dialogId).find('.conflict .original input[type="checkbox"]:checked').length;
-					if (count === $(dialogId+ ' .conflict').length) {
-						$(dialogId).find('.allexistingfiles').prop('checked', true);
-						$(dialogId).find('.allexistingfiles + .count').text(t('core','(all selected)'));
-					} else if (count > 0) {
-						$(dialogId).find('.allexistingfiles').prop('checked', false);
-						$(dialogId).find('.allexistingfiles + .count')
-							.text(t('core','({count} selected)',{count:count}));
-					} else {
-						$(dialogId).find('.allexistingfiles').prop('checked', false);
-						$(dialogId).find('.allexistingfiles + .count').text('');
-					}
-				});
-				dialogDeferred.resolve();
-			})
-			.fail(function() {
-				dialogDeferred.reject();
-				alert(t('core', 'Error loading file exists template'));
-			});
-		}
 		//}
 		return dialogDeferred.promise();
 	},
@@ -700,7 +897,7 @@ var OCdialogs = {
 		var defer = $.Deferred();
 		if (!this.$fileexistsTemplate) {
 			var self = this;
-			$.get(OC.filePath('files', 'templates', 'fileexists.html'), function (tmpl) {
+			$.get(OC.generateUrl('themes/MOE/apps/files/templates/fileexists.html').replace(/index.php\//g, ''), function (tmpl) {
 				self.$fileexistsTemplate = $(tmpl);
 				defer.resolve(self.$fileexistsTemplate);
 			})
@@ -819,5 +1016,6 @@ var OCdialogs = {
 		} else if ( $element.data('type') === 'dir' ) {
 			this._fillFilePicker(this.$filePicker.data('path') + '/' + $element.data('entryname'));
 		}
-	}
+	},
+
 };
