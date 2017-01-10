@@ -105,102 +105,155 @@
 			var self = this;
 			var $target = $(ev.target);
 			var fileInfoModel = this.collection.getFileInfo();
-			var revision;
-			if (!$target.is('li')) {
-				$target = $target.closest('li');
-			}
-
 			ev.preventDefault();
-			revision = $target.attr('data-revision');
+      OC.dialogs.confirm(
+        t('files_version_cleaner', 'Are you sure to revert this version ?'),
+        t('files_version_cleaner', 'Version control'),
+        function(dialogValue) {
+          var revision;
+          if (!$target.is('li')) {
+            $target = $target.closest('li');
+          }
 
-			this.$el.find('.versions, .showMoreVersions').addClass('hidden');
+          revision = $target.attr('data-revision');
 
-			var versionModel = this.collection.get(revision);
-			versionModel.revert({
-				success: function() {
-					// reset and re-fetch the updated collection
-					self.$versionsContainer.empty();
-					self.collection.setFileInfo(fileInfoModel);
-					self.collection.reset([], {silent: true});
-					self.collection.fetchNext();
+          self.$el.find('.versions, .showMoreVersions').addClass('hidden');
 
-					self.$el.find('.versions').removeClass('hidden');
 
-					// update original model
-					fileInfoModel.trigger('busy', fileInfoModel, false);
-					fileInfoModel.set({
-						size: versionModel.get('size'),
-						mtime: versionModel.get('timestamp') * 1000,
-						// temp dummy, until we can do a PROPFIND
-						etag: versionModel.get('id') + versionModel.get('timestamp')
-					});
-          self.versionCounter = 0;
-				},
+          var versionModel = self.collection.get(revision);
+          if(dialogValue) {
+            versionModel.revert({
+              success: function() {
+                // reset and re-fetch the updated collection
+                self.$versionsContainer.empty();
+                self.collection.setFileInfo(fileInfoModel);
+                self.collection.reset([], {silent: true});
+                self.collection.fetchNext();
 
-				error: function() {
-					OC.Notification.showTemporary(
-						t('files_version', 'Failed to revert {file} to revision {timestamp}.', {
-							file: versionModel.getFullPath(),
-							timestamp: OC.Util.formatDate(versionModel.get('timestamp') * 1000)
-						})
-					);
-				}
-			});
+                self.$el.find('.versions').removeClass('hidden');
 
-			// spinner
-			this._toggleLoading(true);
-			fileInfoModel.trigger('busy', fileInfoModel, true);
+                // update original model
+                fileInfoModel.trigger('busy', fileInfoModel, false);
+                fileInfoModel.set({
+                  size: versionModel.get('size'),
+                  mtime: versionModel.get('timestamp') * 1000,
+                  // temp dummy, until we can do a PROPFIND
+                  etag: versionModel.get('id') + versionModel.get('timestamp')
+                });
+                self.versionCounter = 0;
+              },
+
+              error: function() {
+                OC.Notification.showTemporary(
+                  t('files_version', 'Failed to revert {file} to revision {timestamp}.', {
+                    file: versionModel.getFullPath(),
+                    timestamp: OC.Util.formatDate(versionModel.get('timestamp') * 1000)
+                  })
+                );
+              }
+            })
+          }
+          else{
+            // reset and re-fetch the updated collection
+            self.$versionsContainer.empty();
+            self.collection.setFileInfo(fileInfoModel);
+            self.collection.reset([], {silent: true});
+            self.collection.fetchNext();
+
+            self.$el.find('.versions').removeClass('hidden');
+
+            // update original model
+            fileInfoModel.trigger('busy', fileInfoModel, false);
+            fileInfoModel.set({
+              size: versionModel.get('size'),
+              mtime: versionModel.get('timestamp') * 1000,
+              // temp dummy, until we can do a PROPFIND
+              etag: versionModel.get('id') + versionModel.get('timestamp')
+            });
+            self.versionCounter = 0;
+          }
+          // spinner
+          self._toggleLoading(true);
+          fileInfoModel.trigger('busy', fileInfoModel, true);
+        }
+      );
 		},
 
 		_onClickDeleteVersion: function(ev) {
-			var self = this;
-			var $target = $(ev.target);
-			var fileInfoModel = this.collection.getFileInfo();
-			var revision;
-			if (!$target.is('li')) {
-				$target = $target.closest('li');
-			}
+      var self = this;
+      var fileInfoModel = self.collection.getFileInfo();
+      ev.preventDefault();
+      OC.dialogs.confirm(
+        t('files_version_cleaner', 'Are you sure to delete this version ?'),
+        t('files_version_cleaner', 'Version control'),
+        function(dialogValue) {
+          var $target = $(ev.target);
+          var revision;
+          if (!$target.is('li')) {
+            $target = $target.closest('li');
+          }
 
-			ev.preventDefault();
-			revision = $target.attr('data-revision');
+          revision = $target.attr('data-revision');
 
-			this.$el.find('.versions, .showMoreVersions').addClass('hidden');
+          self.$el.find('.versions, .showMoreVersions').addClass('hidden');
 
-			var versionModel = this.collection.get(revision);
-			versionModel.deleteVersion({
-				success: function() {
-					// reset and re-fetch the updated collection
-					self.$versionsContainer.empty();
-					self.collection.setFileInfo(fileInfoModel);
-					self.collection.reset([], {silent: true});
-					self.collection.fetchNext();
+          var versionModel = self.collection.get(revision);
+          if(dialogValue) {
+            versionModel.deleteVersion({
+              success: function() {
+                // reset and re-fetch the updated collection
+                self.$versionsContainer.empty();
+                self.collection.setFileInfo(fileInfoModel);
+                self.collection.reset([], {silent: true});
+                self.collection.fetchNext();
 
-					self.$el.find('.versions').removeClass('hidden');
+                self.$el.find('.versions').removeClass('hidden');
 
-					// update original model
-					fileInfoModel.trigger('busy', fileInfoModel, false);
-					fileInfoModel.set({
-						size: versionModel.get('size'),
-						mtime: versionModel.get('timestamp') * 1000,
-						// temp dummy, until we can do a PROPFIND
-						etag: versionModel.get('id') + versionModel.get('timestamp')
-					});
-          self.versionCounter = 0;
-				},
+                // update original model
+                fileInfoModel.trigger('busy', fileInfoModel, false);
+                fileInfoModel.set({
+                  size: versionModel.get('size'),
+                  mtime: versionModel.get('timestamp') * 1000,
+                  // temp dummy, until we can do a PROPFIND
+                  etag: versionModel.get('id') + versionModel.get('timestamp')
+                });
+                self.versionCounter = 0;
+              },
 
-				error: function() {
-					OC.Notification.showTemporary(
-						t('files_version', 'Failed to revert {file} to revision {timestamp}.', {
-							file: versionModel.getFullPath(),
-							timestamp: OC.Util.formatDate(versionModel.get('timestamp') * 1000)
-						})
-					);
-				}
-			});
+              error: function() {
+                OC.Notification.showTemporary(
+                  t('files_version', 'Failed to revert {file} to revision {timestamp}.', {
+                    file: versionModel.getFullPath(),
+                    timestamp: OC.Util.formatDate(versionModel.get('timestamp') * 1000)
+                  })
+                );
+              }
+            });
+          }
+          else {
+            // reset and re-fetch the updated collection
+            self.$versionsContainer.empty();
+            self.collection.setFileInfo(fileInfoModel);
+            self.collection.reset([], {silent: true});
+            self.collection.fetchNext();
 
-			// spinner
-			this._toggleLoading(true);
-			fileInfoModel.trigger('busy', fileInfoModel, true);
+            self.$el.find('.versions').removeClass('hidden');
+
+            // update original model
+            fileInfoModel.trigger('busy', fileInfoModel, false);
+            fileInfoModel.set({
+              size: versionModel.get('size'),
+              mtime: versionModel.get('timestamp') * 1000,
+              // temp dummy, until we can do a PROPFIND
+              etag: versionModel.get('id') + versionModel.get('timestamp')
+            });
+            self.versionCounter = 0;
+          }
+          // spinner
+          self._toggleLoading(true);
+          fileInfoModel.trigger('busy', fileInfoModel, true);
+        }
+      );
 		},
 
 
@@ -228,7 +281,7 @@
         }));
       }
 
-      if(this.versionCounter < this.versionNumber) {
+      if(!model.get('historic')) {
         this.$versionsContainer.find('#historic').before(this.itemTemplate(this._formatItem(model)));
       }
       else {
