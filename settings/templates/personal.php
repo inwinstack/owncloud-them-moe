@@ -31,13 +31,35 @@
     <h2><?php p($l->t('Quota Stats')); ?></h2>
 </div>
 
+<?php
+$storageinfo = \OC_Helper::getStorageInfo('/');
+$version_size = \OC_Util::getVersionsSize();
+$trash_size = \OC_Util::getTrashbinSize();
+
+$versions = number_format($version_size/$storageinfo['total']*100,2);
+$trashbin = number_format($trash_size/$storageinfo['total']*100,2);
+$total_percent = number_format($storageinfo['used']/$storageinfo['total']*100,2) + $trashbin + $versions;
+$usage = \OC_Helper::humanFileSize($storageinfo['used'] + $version_size + $trash_size);
+$used = $storageinfo['used'] + $version_size + $trash_size;
+$total_percent = ($total_percent == 0.00 && $used > 0) ? 0.01 : $total_percent;
+
+?>
+
+
 <div id="quota" class="section">
-	<div style="width:<?php p($_['usage_relative']);?>%"
-		<?php if($_['usage_relative'] > 80): ?> class="quota-warning" <?php endif; ?>>
-		<p id="quotatext">
-			<?php print_unescaped($l->t('You have used <strong>%s</strong> of the available <strong>%s</strong>',
-			array($_['usage'], $_['total_space'])));?>
-		</p>
+	<div  class="progress" style="width:<?php p($total_percent);?>%"
+		<?php if($total_percent > 80): ?> class="quota-warning" <?php endif; ?>>
+            <p id="quotatext">&emsp;
+<?php
+
+
+
+$trash_percent  = ($trashbin == 0.00 && $trash_size > 0) ? 0.01 : $trashbin; 
+$versions_percent  = ($versions == 0.00 && $version_size > 0) ? 0.01 : $versions; 
+?>
+
+                <?php print_unescaped($l->t('You have used <strong>%s</strong>, trashbin have used <strong>%s</strong>, versions have used <strong>%s</strong> of the available <strong>%s</strong>',array($usage, $trash_percent.'%', $versions_percent.'%', $_['total_space'])));?>
+            </p>
 	</div>
 </div>
 
@@ -122,6 +144,11 @@
     <a href="https://storage.edu.tw/教育部雲端儲存桌面代理應用程式.pkg" class="client">
         <span class="client-info"><?php p($l->t('Desktop client'));?></span>
         <span class="client-info">Mac OSX 10.7+</span>
+    </a>
+    
+    <a href="https://storage.edu.tw/Ubuntu_14.04-MOE-Storage-Cloud-Install.sh" class="client">
+        <span class="client-info"><?php p($l->t('Desktop client'));?></span>
+        <span class="client-info">Ubuntu 14.04</span>
     </a>
     
     <a href="<?php p($_['clients']['android']); ?>" class="client" target="_blank">
