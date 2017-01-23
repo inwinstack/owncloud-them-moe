@@ -919,6 +919,7 @@
 					icon = OC.MimeType.getIconUrl('dir-external');
 					dataIcon = icon;
 				}
+
 				if (fileData.versionControl) {
 					icon = OC.MimeType.getIconUrl('folder-version');
 					dataIcon = icon;
@@ -1033,7 +1034,7 @@
 				simpleSize = humanFileSize(parseInt(fileData.size, 10), true);
 				sizeColor = Math.round(160-Math.pow((fileData.size/(1024*1024)),2));
 			} else {
-				simpleSize = t('files', 'Pending');
+				simpleSize = t('files', '--');
 			}
 
 			td = $('<td></td>').attr({
@@ -1056,7 +1057,7 @@
 				text = OC.Util.relativeModifiedDate(mtime);
 			} else {
 				formatted = t('files', 'Unable to determine date');
-				text = '?';
+				text = '--';
 			}
 			td = $('<td></td>').attr({ "class": "date" });
 			td.append($('<span></span>').attr({
@@ -1973,7 +1974,114 @@
 				}
 			});
 		},
+    
+  /**
+   * these three functions is update confirm dialog
+   *
+   **/
+  $messageForceDeleteTemplate : null,
 
+    confirm_forcedelete:function(text1, text2, title, callback, modal) {
+		return this.message_forcedelete(
+			text1,
+      text2,
+			title,
+			'notice',
+			OCdialogs.YES_NO_BUTTONS,
+			callback,
+			modal
+		);
+	},
+  
+  message_forcedelete:function(content1, content2, title, dialogType, buttons, callback, modal) {
+		return $.when(this._getMessageForceDeleteTemplate()).then(function($tmpl) {
+			var dialogName = 'oc-dialog-' + OCdialogs.dialogsCounter + '-content';
+			var dialogId = '#' + dialogName;
+			var $dlg = $tmpl.octemplate({
+				dialog_name: dialogName,
+				title: title,
+				message1: content1,
+				message2: content2,
+				type: dialogType
+			});
+			if (modal === undefined) {
+				modal = false;
+			}
+			$('body').append($dlg);
+			var buttonlist = [];
+			switch (buttons) {
+			case OCdialogs.YES_NO_BUTTONS:
+				buttonlist = [{
+					text: t('core', 'No'),
+					click: function(){
+						if (callback !== undefined) {
+							callback(false);
+						}
+						$(dialogId).ocdialog('close');
+					}
+				},
+				{
+					text: t('core', 'Yes'),
+					click: function(){
+						if (callback !== undefined) {
+							callback(true);
+						}
+						$(dialogId).ocdialog('close');
+					},
+					defaultButton: true
+				}];
+				break;
+			case OCdialogs.OK_BUTTON:
+				var functionToCall = function() {
+					$(dialogId).ocdialog('close');
+					if(callback !== undefined) {
+						callback();
+					}
+				};
+				buttonlist[0] = {
+					text: t('core', 'Ok'),
+					click: functionToCall,
+					defaultButton: true
+				};
+				break;
+			}
+
+			$(dialogId).ocdialog({
+				closeOnEscape: true,
+				modal: modal,
+				buttons: buttonlist
+			});
+			OCdialogs.dialogsCounter++;
+		})
+		.fail(function(status, error) {
+			// If the method is called while navigating away from
+			// the page, we still want to deliver the message.
+			if(status === 0) {
+				alert(title + ': ' + content);
+			} else {
+				alert(t('core', 'Error loading message template: {error}', {error: error}));
+			}
+		});
+	},
+
+
+
+    _getMessageForceDeleteTemplate: function() {
+		var defer = $.Deferred();
+		if(!this.$messageForceDeleteTemplate) {
+			var self = this;
+			$.get(OC.generateUrl('themes/MOE/core/templates/message.html').replace(/index.php\//g, ''), function(tmpl) {
+				self.$messageForceDeleteTemplate = $(tmpl);
+				defer.resolve(self.$messageForceDeleteTemplate);
+			})
+			.fail(function(jqXHR, textStatus, errorThrown) {
+				defer.reject(jqXHR.status, errorThrown);
+			});
+		} else {
+			defer.resolve(this.$messageForceDeleteTemplate);
+		}
+		return defer.promise();
+	},
 		/**
 		 * Delete the given files from the given dir
 		 * @param files file names list (without path)
@@ -1983,75 +2091,106 @@
 		do_delete:function(files, dir) {
 			var self = this;
 			var params;
+      var remote_status = false;
+
 			if (files && files.substr) {
 				files=[files];
 			}
-			if (files) {
-				this.showFileBusyState(files, true);
-				for (var i=0; i<files.length; i++) {
-				}
-			}
-			// Finish any existing actions
-			if (this.lastAction) {
-				this.lastAction();
-			}
+      files && $.each(files, function(index, file) {
+        var attribute = self.getModelForFile(file).attributes;
+        
+        if('mountType' in attribute && attribute.mountType !== 'shared-root') {
+          remote_status = true;
+          return;
+        }
+      });
+      if(remote_status) {
+        this.confirm_forcedelete(
+        t('files', 'If force delete, you will not be able to restore the file or folder in this trashbin.'),
+        t('files','Are you sure to force delete this file or folder ?'),
+        t('files', 'Force Delete?'),
+        function(dialogValue) {
+          if(dialogValue) {
 
-			params = {
-				dir: dir || this.getCurrentDirectory()
-			};
-			if (files) {
-				params.files = JSON.stringify(files);
-			}
-			else {
-				// no files passed, delete all in current dir
-				params.allfiles = true;
-				// show spinner for all files
-				this.showFileBusyState(this.$fileList.find('tr'), true);
-			}
+            deletefile();
+          }
+        });
+      } else {
 
-			$.post(OC.filePath('files', 'ajax', 'delete.php'),
-					params,
-					function(result) {
-						if (result.status === 'success') {
-							if (params.allfiles) {
-								self.setFiles([]);
-							}
-							else {
-								$.each(files,function(index,file) {
-									var fileEl = self.remove(file, {updateSummary: false});
-									// FIXME: not sure why we need this after the
-									// element isn't even in the DOM any more
-									fileEl.find('.selectCheckBox').prop('checked', false);
-									fileEl.removeClass('selected');
-									self.fileSummary.remove({type: fileEl.attr('data-type'), size: fileEl.attr('data-size')});
-								});
-							}
-							// TODO: this info should be returned by the ajax call!
-							self.updateEmptyContent();
-							self.fileSummary.update();
-							self.updateSelectionSummary();
-							self.updateStorageStatistics();
-							// in case there was a "storage full" permanent notification
-							OC.Notification.hide();
-						} else {
-							if (result.status === 'error' && result.data.message) {
-								OC.Notification.showTemporary(result.data.message);
-							}
-							else {
-								OC.Notification.showTemporary(t('files', 'Error deleting file.'));
-							}
-							if (params.allfiles) {
-								// reload the page as we don't know what files were deleted
-								// and which ones remain
-								self.reload();
-							}
-							else {
-								$.each(files,function(index,file) {
-									self.showFileBusyState(file, false);
-								});
-							}
-						}
-					});
+        deletefile();
+      }
+
+      function deletefile() {
+        if (files) {
+              self.showFileBusyState(files, true);
+              for (var i=0; i<files.length; i++) {
+              }
+            }
+            // Finish any existing actions
+            if (self.lastAction) {
+              self.lastAction();
+            }
+
+            params = {
+              dir: dir || self.getCurrentDirectory()
+            };
+            if (files) {
+              params.files = JSON.stringify(files);
+            }
+            else {
+              // no files passed, delete all in current dir
+              params.allfiles = true;
+              // show spinner for all files
+              self.showFileBusyState(self.$fileList.find('tr'), true);
+            }
+
+       
+            $.post(OC.filePath('files', 'ajax', 'delete.php'),
+                params,
+                function(result) {
+                  if (result.status === 'success') {
+                    if (params.allfiles) {
+                      self.setFiles([]);
+                    }
+                    else {
+                      $.each(files,function(index,file) {
+                        var fileEl = self.remove(file, {updateSummary: false});
+                        // FIXME: not sure why we need this after the
+                        // element isn't even in the DOM any more
+                        fileEl.find('.selectCheckBox').prop('checked', false);
+                        fileEl.removeClass('selected');
+                        self.fileSummary.remove({type: fileEl.attr('data-type'), size: fileEl.attr('data-size')});
+                      });
+                    }
+                    // TODO: this info should be returned by the ajax call!
+                    self.updateEmptyContent();
+                    self.fileSummary.update();
+                    self.updateSelectionSummary();
+                    self.updateStorageStatistics();
+                    // in case there was a "storage full" permanent notification
+                    OC.Notification.hide();
+                  } else {
+                    if (result.status === 'error' && result.data.message) {
+                      OC.Notification.showTemporary(result.data.message);
+                    }
+                    else {
+                      OC.Notification.showTemporary(t('files', 'Error deleting file.'));
+                    }
+                    if (params.allfiles) {
+                      // reload the page as we don't know what files were deleted
+                      // and which ones remain
+                      self.reload();
+                    }
+                    else {
+                      $.each(files,function(index,file) {
+                        self.showFileBusyState(file, false);
+                      });
+                    }
+                  }
+                });
+
+      }
+
 		},
 		/**
 		 * Creates the file summary section
