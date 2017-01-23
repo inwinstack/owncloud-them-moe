@@ -33,5 +33,6 @@ body {
 }
   
 button {
-  padding: 5px 33px;
+  width: 70px;
+  height: 35px;
 }
