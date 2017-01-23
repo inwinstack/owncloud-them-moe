@@ -795,30 +795,6 @@ var OCdialogs = {
 
 			$conflicts.append($conflict);
             
-/*
-			//set more recent mtime bold
-			// ie sucks
-			if (replacement.lastModifiedDate && replacement.lastModifiedDate.getTime() > original.mtime) {
-				$replacementDiv.find('.mtime').css('font-weight', 'bold');
-			} else if (replacement.lastModifiedDate && replacement.lastModifiedDate.getTime() < original.mtime) {
-				$originalDiv.find('.mtime').css('font-weight', 'bold');
-			} else {
-				//TODO add to same mtime collection?
-			}
-
-      //set bigger size bold
-			if (replacement.size && replacement.size > original.size) {
-				$replacementDiv.find('.size').css('font-weight', 'bold');
-			} else if (replacement.size && replacement.size < original.size) {
-				$originalDiv.find('.size').css('font-weight', 'bold');
-			} else {
-				//TODO add to same size collection?
-			}
-*/
-			//TODO show skip action for files with same size and mtime in bottom row
-
-			// always keep readonly files
-
 			if (original.status === 'readonly') {
 				$originalDiv
 					.addClass('readonly')
@@ -836,11 +812,8 @@ var OCdialogs = {
       });
 
     };
-		//var selection = controller.getSelection(data.originalFiles);
-		//if (selection.defaultAction) {
-		//	controller[selection.defaultAction](data);
-		//} else {
-    var dialogName = 'oc-dialog-fileexists-content';
+
+		var dialogName = 'oc-dialog-fileexists-content';
 		var dialogId = '#' + dialogName;
     if(self._fileexistsshown) {
       this.dataQueue.push(data);
@@ -854,10 +827,6 @@ var OCdialogs = {
       showdialog(original,replacement,data);
     }
     
-    
-
-
-		//}
 		return dialogDeferred.promise();
 	},
 	_getFilePickerTemplate: function() {
