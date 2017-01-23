@@ -58,7 +58,7 @@ $trash_percent  = ($trashbin == 0.00 && $trash_size > 0) ? 0.01 : $trashbin;
 $versions_percent  = ($versions == 0.00 && $version_size > 0) ? 0.01 : $versions; 
 ?>
 
-                <?php print_unescaped($l->t('You have used <strong>%s</strong>, trashbin have used <strong>%s</strong>, versions have used <strong>%s</strong> of the available <strong>%s</strong>',array($usage, $trash_percent.'%', $versions_percent.'%', $_['total_space'])));?>
+                <?php print_unescaped($l->t("Total space is <strong>%s</strong>. You have used <strong>%s(%s)</strong> [files used <strong>%s(%s)</strong> / trashbin used <strong>%s(%s)</strong> / versions used <strong>%s(%s)</storng>]",array($_['total_space'], $usage, $total_percent.'%', $_['usage'], $_['usage_relative'].'%', OC_Helper::humanFileSize($trash_size), $trashbin.'%', OC_Helper::humanFileSize($version_size), $versions.'%') ) );?>
             </p>
 	</div>
 </div>
