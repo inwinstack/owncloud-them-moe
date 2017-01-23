@@ -919,6 +919,11 @@
 					icon = OC.MimeType.getIconUrl('dir-external');
 					dataIcon = icon;
 				}
+
+				if (fileData.versionControl) {
+					icon = OC.MimeType.getIconUrl('folder-version');
+					dataIcon = icon;
+				}
 			}
 
 			//containing tr
@@ -930,7 +935,8 @@
 				"data-mime": mime,
 				"data-mtime": mtime,
 				"data-etag": fileData.etag,
-				"data-permissions": fileData.permissions || this.getDirectoryPermissions()
+				"data-permissions": fileData.permissions || this.getDirectoryPermissions(),
+        "data-version": fileData.versionControl || false,
 			});
 
 			if (dataIcon) {
@@ -1968,7 +1974,7 @@
 				}
 			});
 		},
-
+    
   /**
    * these three functions is update confirm dialog
    *
@@ -2076,7 +2082,6 @@
 		}
 		return defer.promise();
 	},
-
 		/**
 		 * Delete the given files from the given dir
 		 * @param files file names list (without path)
@@ -2185,6 +2190,7 @@
                 });
 
       }
+
 		},
 		/**
 		 * Creates the file summary section
