@@ -603,27 +603,25 @@ var OCdialogs = {
 
 				$(dialogId).css('height','auto');
                 
-                if(!disabled) {
-                    //add checkbox toggling actionsi
-                    $(dialogId).find('.allnewfiles').on('click', function() {
-                        var $checkboxes = $(dialogId).find('.conflict .replacement input[type="checkbox"]');
-                        $checkboxes.prop('checked', $(this).prop('checked'));
-                    });
-                    
-                    $(dialogId).find('.allexistingfiles').on('click', function() {
-                        var $checkboxes = $(dialogId).find('.conflict .original:not(.readonly) input[type="checkbox"]');
-                        $checkboxes.prop('checked', $(this).prop('checked'));
-                    });
-                    
-                    $(dialogId).find('.conflicts').on('click', '.replacement,.original:not(.readonly)', function() {
-                        var $checkbox = $(this).find('input[type="checkbox"]');
-                        $checkbox.prop('checked', !$checkbox.prop('checked'));
-                    });
-                    $(dialogId).find('.conflicts').on('click', '.replacement input[type="checkbox"],.original:not(.readonly) input[type="checkbox"]', function() {
-                        var $checkbox = $(this);
-                        $checkbox.prop('checked', !$checkbox.prop('checked'));
-                    });
-                }
+        //add checkbox toggling actionsi
+        $(dialogId).find('.allnewfiles').on('click', function() {
+            var $checkboxes = $(dialogId).find('.conflict .replacement input[type="checkbox"]');
+            $checkboxes.prop('checked', $(this).prop('checked'));
+        });
+        
+        $(dialogId).find('.allexistingfiles').on('click', function() {
+            var $checkboxes = $(dialogId).find('.conflict .original:not(.readonly) input[type="checkbox"]');
+            $checkboxes.prop('checked', $(this).prop('checked'));
+        });
+        
+        $(dialogId).find('.conflicts').on('click', '.replacement,.original:not(.readonly)', function() {
+            var $checkbox = $(this).find('input[type="checkbox"]');
+            $checkbox.prop('checked', !$checkbox.prop('checked'));
+        });
+        $(dialogId).find('.conflicts').on('click', '.replacement input[type="checkbox"],.original:not(.readonly) input[type="checkbox"]', function() {
+            var $checkbox = $(this);
+            $checkbox.prop('checked', !$checkbox.prop('checked'));
+        });
                 
 				//update counters
 				$(dialogId).on('click', '.replacement,.allnewfiles', function() {

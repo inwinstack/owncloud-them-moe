@@ -31,3 +31,7 @@ body {
   content: url(../img/moe_logo.png);
   height: 65%;
 }
+  
+button {
+  padding: 5px 33px;
+}
