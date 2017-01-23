@@ -1,0 +1,36 @@
+<div id="{dialog_name}" title="{title}" class="fileexists">
+
+  <span class="originfilename"></span> <br/> <br/>
+	<span class="why">{why}<!-- Which files do you want to keep --></span><br/>
+  <table>
+		<th>{allnewfiles}<span class="count"></span></th>
+		<th>{allexistingfiles}<span class="count"></span></th>
+	</table>
+
+	<div class="conflicts">
+		<div class="template">
+			<div class="replacement" style="border-right: 0.25px solid #ddd; border-bottom: 0.5px solid #ddd; border-top: 0.5px solid #ddd;">
+        <!--<input type="radio" name="choosefile" class="checkbox u-left"/>-->
+				<label>
+				<div class="mtime">
+          <p class="day"></p>
+          <p class="time"></p>
+        </div>
+				<div class="size"></div>
+				</label>
+			</div>
+			<div class="original" style="border-left: 0.25px solid #ddd; border-bottom: 0.5px solid #ddd; border-top: 0.5px solid #ddd;">
+        <!--<input type="radio" name="choosefile" class="checkbox u-left" />-->
+				<label>
+        <div class="mtime">
+          <p class="day"></p>
+          <p class="time"></p>
+        </div>
+				<div class="size"></div>
+				<div class="message"></div>
+				</label>
+			</div>
+		</div>
+	</div>
+  <div class="newname" style="display:none;"> <input type="text" id="newname"></div>
+</div>

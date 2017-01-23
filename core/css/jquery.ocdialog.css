@@ -31,12 +31,64 @@
 	margin-top: 10px;
 	width: 100%;
 }
+
+/* align primary button to right, other buttons to left */
+
+.buttonrow-tooltip {
+  background: white;
+	float: right;
+	position: relative;
+	bottom: 0;
+	display: block;
+	margin-top: 10px;
+	width: 100%;
+
+}
+
+
+.buttonrow-tooltip input {
+  float: left;
+  margin-top: 10px;
+
+}
+
+.buttonrow-tooltip label {
+	float: left;
+  margin-top: 8px;
+}
+
+
+
+.oc-dialog-buttonrow.fourbuttons button:nth-child(1) {
+	float: left;
+}
+.oc-dialog-buttonrow.fourbuttons button:nth-child(2) {
+	float: left;
+}
+
+.oc-dialog-buttonrow.fourbuttons button:nth-child(3) {
+	float: left;
+}
+
+.oc-dialog-buttonrow.fourbuttons button:nth-child(4) {
+	float: left;
+}
+
+
+
 /* align primary button to right, other buttons to left */
 .oc-dialog-buttonrow.twobuttons button:nth-child(1) {
 	float: right;
 }
+
 .oc-dialog-buttonrow.twobuttons button:nth-child(2) {
 	float: right;
+}
+
+
+.oc-dialog-buttonrow.twobuttons input {
+	float: left;
+  width: 65%;
 }
 
 .oc-dialog-buttonrow.onebutton button {
