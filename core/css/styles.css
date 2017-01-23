@@ -26,6 +26,12 @@ body {
   border-bottom: 1px solid #eee;
 }
 
+.footer-img {
+  display: inline-block;
+  content: url(../img/moe_logo.png);
+  height: 65%;
+}
+  
 button {
   padding: 5px 33px;
 }

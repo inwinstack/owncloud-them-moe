@@ -42,7 +42,13 @@
 				<div class="push"></div><!-- for sticky footer -->
 			</div>
 		</div>
-		<footer role="contentinfo"></footer>
+        <footer role="contentinfo">
+            <div class="footer-img"></div>
+            <div style="display: inline-block">
+                請使用教育體系 OpenID 帳號進行登入<br>
+            Copyright © Ministry of Education. All rigths reserved.
+            </div>
+        </footer>
 	</body>
 </html>
 
