@@ -108,7 +108,7 @@
 			ev.preventDefault();
       OC.dialogs.confirm(
         t('files_version_cleaner', 'Are you sure to revert this version ?'),
-        t('files_version_cleaner', 'Version control'),
+        t('files_version_cleaner', 'Revert version'),
         function(dialogValue) {
           var revision;
           if (!$target.is('li')) {
@@ -185,7 +185,7 @@
       ev.preventDefault();
       OC.dialogs.confirm(
         t('files_version_cleaner', 'Are you sure to delete this version ?'),
-        t('files_version_cleaner', 'Version control'),
+        t('files_version_cleaner', 'Delete version'),
         function(dialogValue) {
           var $target = $(ev.target);
           var revision;
