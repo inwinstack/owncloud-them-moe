@@ -2,3 +2,18 @@
 #app-navigation li > a[data-navigation=shares] {
   display: none;
 }
+
+.icon-delete-color {
+  background-image: url('../img/delete-color.svg');
+  opacity: .5;
+}
+
+.icon-add-color {
+  background-image: url('../img/add-color.svg');
+  opacity: .5;
+}
+
+.icon-change {
+  background-image: url('../img/change.svg');
+}
+
