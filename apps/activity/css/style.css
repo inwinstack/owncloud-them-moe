@@ -3,17 +3,48 @@
   display: none;
 }
 
-.icon-delete-color {
-  background-image: url('../img/delete-color.svg');
-  opacity: .5;
+.nav-icon-position {
+  background-size: 16px 16px;
+  background-position: 14px center;
+  background-repeat: no-repeat;
 }
 
-.icon-add-color {
-  background-image: url('../img/add-color.svg');
-  opacity: .5;
+#app-navigation .nav-icon-files {
+	background-image: url('/apps/files/img/folder.svg');
+  padding-left: 44px;
 }
 
-.icon-change {
-  background-image: url('../img/change.svg');
+#app-navigation 
+.nav-icon-favorites {
+  padding-left: 44px;
+	background-image: url('/apps/files/img/star.svg');
 }
-
+#app-navigation 
+.nav-icon-sharingin,
+#app-navigation
+.nav-icon-sharingout {
+  padding-left: 44px;
+	background-image: url('/apps/files/img/share.svg');
+}
+#app-navigation 
+.nav-icon-sharinglinks {
+  padding-left: 44px;
+	background-image: url('/apps/files/img/public.svg');
+}
+#app-navigation 
+.nav-icon-extstoragemounts {
+  padding-left: 44px;
+	background-image: url('/apps/files/img/external.svg');
+}
+#app-navigation 
+.nav-icon-trashbin {
+  padding-left: 44px;
+	background-image: url('/apps/files/img/delete.svg');
+  position: fixed;
+	bottom: 44px;
+}
+#app-navigation 
+.nav-icon-activity {
+  padding-left: 44px;
+	background-image: url('/themes/MOE/apps/activity/img/activity.svg');
+}

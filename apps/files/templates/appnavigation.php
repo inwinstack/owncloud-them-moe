@@ -8,5 +8,11 @@
 			</a>
 		</li>
 		<?php } ?>
+		<li data-id="activity" class="nav-activity">
+			<a href="/index.php/apps/activity/"
+				class="nav-icon-activity">
+				<span>所有活動</span>
+			</a>
+		</li>
 	</ul>
 </div>

@@ -2,3 +2,6 @@
   background-image: url('../img/share_with_me.svg');
 }
 
+.nav-icon-activity {
+	background-image: url('/themes/MOE/apps/activity/img/activity.svg');
+}

@@ -111,18 +111,6 @@
 		<nav role="navigation"><div id="navigation">
 			<div id="apps" class="svg">
 				<ul>
-				<?php foreach($_['navigation'] as $entry): ?>
-					<li data-id="<?php p($entry['id']); ?>">
-						<a href="<?php print_unescaped($entry['href']); ?>" tabindex="3"
-							<?php if( $entry['active'] ): ?> class="active"<?php endif; ?>>
-							<img class="app-icon svg" alt="" src="<?php print_unescaped($entry['icon']); ?>">
-							<div class="icon-loading-dark" style="display:none;"></div>
-							<span>
-								<?php p($entry['name']); ?>
-							</span>
-						</a>
-					</li>
-				<?php endforeach; ?>
 				<?php
 					/* show "More apps" link to app administration directly in app navigation, as last entry */
 					if(OC_User::isAdminUser(OC_User::getUser())):
