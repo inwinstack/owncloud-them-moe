@@ -6,14 +6,13 @@
 /** @var $l OC_L10N */
 /** @var $_ array */
 ?>
-<div id="app-navigation"　class="activity-sidebar">
+<div id="app-navigation">
 	<?php foreach ($_['navigations'] as $navigationGroup => $navigationEntries) { ?>
 		<?php if ($navigationGroup !== 'apps'): ?><ul><?php endif; ?>
 
 		<?php foreach ($navigationEntries as $navigation) { ?>
 		<li<?php if ($_['activeNavigation'] === $navigation['id']): ?> class="active"<?php endif; ?>>
-			<a data-navigation="<?php p($navigation['id']) ?>" href="<?php p($navigation['url']) ?>"
-			   class="nav-icon-<?php p($navigation['icon']) ?> svg icon-width nav-icon-position">
+			<a data-navigation="<?php p($navigation['id']) ?>" class="nav-icon-<?php p($navigation['id'])?> nav-icon-position" href="<?php p($navigation['url']) ?>">
 				<?php p($navigation['name']) ?>
 			</a>
 		</li>
@@ -21,4 +20,16 @@
 
 		<?php if ($navigationGroup !== 'top'): ?></ul><?php endif; ?>
 	<?php } ?>
+
+	<div id="app-settings">
+		<div id="app-settings-header">
+			<button class="settings-button" data-apps-slide-toggle="#app-settings-content"></button>
+		</div>
+
+		<div id="app-settings-content">
+			<input type="checkbox"<?php if ($_['rssLink']): ?> checked="checked"<?php endif; ?> id="enable_rss" class="checkbox" />
+			<label for="enable_rss"><?php p($l->t('Enable RSS feed'));?></label>
+			<input id="rssurl"<?php if (!$_['rssLink']): ?> class="hidden"<?php endif; ?> type="text" readonly="readonly" value="<?php p($_['rssLink']); ?>" />
+		</div>
+	</div>
 </div>

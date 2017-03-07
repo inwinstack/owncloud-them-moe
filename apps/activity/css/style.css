@@ -9,42 +9,45 @@
   background-repeat: no-repeat;
 }
 
-#app-navigation .nav-icon-files {
-	background-image: url('/apps/files/img/folder.svg');
+#app-navigation .nav-icon-fileList {
+	background-image: url('../../files/img/folder.svg');
   padding-left: 44px;
 }
 
 #app-navigation 
-.nav-icon-favorites {
+.nav-icon-fileList-favorites {
   padding-left: 44px;
-	background-image: url('/apps/files/img/star.svg');
+	background-image: url('../../files/img/star.svg');
 }
 #app-navigation 
-.nav-icon-sharingin,
+.nav-icon-fileList-sharingin {
+  padding-left: 44px;
+	background-image: url('../../files/img/share_with_me.svg');
+}
 #app-navigation
-.nav-icon-sharingout {
+.nav-icon-fileList-sharingout {
   padding-left: 44px;
-	background-image: url('/apps/files/img/share.svg');
+	background-image: url('../../files/img/share.svg');
 }
 #app-navigation 
-.nav-icon-sharinglinks {
+.nav-icon-fileList-sharinglinks {
   padding-left: 44px;
-	background-image: url('/apps/files/img/public.svg');
+	background-image: url('../../files/img/public.svg');
 }
 #app-navigation 
-.nav-icon-extstoragemounts {
+.nav-icon-fileList-extstoragemounts {
   padding-left: 44px;
-	background-image: url('/apps/files/img/external.svg');
+	background-image: url('../../files/img/external.svg');
 }
 #app-navigation 
-.nav-icon-trashbin {
+.nav-icon-fileList-trashbin {
   padding-left: 44px;
-	background-image: url('/apps/files/img/delete.svg');
+	background-image: url('../../files/img/delete.svg');
   position: fixed;
 	bottom: 44px;
 }
 #app-navigation 
-.nav-icon-activity {
+.nav-icon-all {
   padding-left: 44px;
-	background-image: url('/themes/MOE/apps/activity/img/activity.svg');
+	background-image: url('../img/activity.svg');
 }

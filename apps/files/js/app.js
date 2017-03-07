@@ -165,7 +165,7 @@
 				OC.Apps.hideAppSidebar($('.detailsView'));
 				this.navigation.getActiveContainer().trigger(new $.Event('urlChanged', params));
 				if(params.view === 'activity') {
-					this.navigation.trigger(new $.Event('urlChanged', params));
+					window.location.href = this.navigation.context.URL.replace(/files\/\?[a-zA-Z]*=[a-zA-Z]*\-/g, 'activity');
 				}
 			}
 		},
