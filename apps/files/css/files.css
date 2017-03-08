@@ -1,7 +1,29 @@
+.nav-icon-files {
+	background-image: url('../img/folder.svg');
+}
+
+.nav-icon-favorites {
+	background-image: url('../img/star.svg');
+}
+
 .nav-icon-sharingin {
   background-image: url('../img/share_with_me.svg');
 }
 
+.nav-icon-sharingout {
+  background-image: url('../img/share.svg');
+}
+
+.nav-icon-extstoragemounts {
+	background-image: url('../img/external.svg');
+}
+
 .nav-icon-activity {
-  background-image: url('../img/activity.svg');
+  background-image: url('../../activity/img/activity.svg');
+}
+
+.nav-icon-trashbin {
+	background-image: url('../img/delete.svg');
+  position: fixed;
+	bottom: 0px;
 }
