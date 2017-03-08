@@ -26,4 +26,5 @@
 	background-image: url('../img/delete.svg');
   position: fixed;
 	bottom: 0px;
+	width: 250px !important;
 }
