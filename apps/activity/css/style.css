@@ -44,7 +44,7 @@
   padding-left: 44px;
 	background-image: url('../../files/img/delete.svg');
   position: fixed;
-	bottom: 44px;
+	bottom: 0px;
 }
 #app-navigation 
 .nav-icon-all {
