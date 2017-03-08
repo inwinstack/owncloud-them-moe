@@ -45,13 +45,13 @@
 	background-image: url('../../files/img/delete.svg');
   position: fixed;
 	bottom: 0px;
+  width: 250px;
 }
 #app-navigation 
 .nav-icon-all {
   padding-left: 44px;
 	background-image: url('../img/activity.svg');
 }
-
 
 .icon-share_with_me {
         background-image: url('../../files/img/share_with_me.svg');

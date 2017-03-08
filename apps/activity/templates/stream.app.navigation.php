@@ -13,7 +13,7 @@
 		<?php foreach ($navigationEntries as $navigation) { ?>
 			<?php if ($navigation['id'] !== "fileList-sharinglinks") : ?>
 				<li<?php if ($_['activeNavigation'] === $navigation['id']): ?> class="active"<?php endif; ?>>
-					<a data-navigation="<?php p($navigation['id']) ?>" class="nav-icon-<?php p($navigation['id'])?> nav-icon-position" href="<?php p($navigation['url']) ?>">
+					<a data-navigation="<?php p($navigation['id']) ?>" class="nav-icon-<?php p($navigation['id'])?> nav-icon-position">
 						<?php p($navigation['name']) ?>
 					</a>
 				</li>

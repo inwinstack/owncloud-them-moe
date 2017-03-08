@@ -7,3 +7,6 @@
   background-color: #FFEDD3;
 }
 
+#app-navigation li {
+  width: inherit;
+}
