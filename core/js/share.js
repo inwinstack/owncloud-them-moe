@@ -288,6 +288,7 @@ OC.Share = _.extend(OC.Share || {}, {
 			message = t('core', 'Shared');
 			// even if reshared, only show "Shared by"
 			if (owner) {
+                                image =  OC.getRootPath() + '/themes/MOE/apps/files/img/share_with_me.svg';
 				message = this._formatRemoteShare(owner);
 			}
 			else if (recipients) {

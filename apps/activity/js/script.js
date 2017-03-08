@@ -151,6 +151,9 @@ $(function(){
 		},
 
 		addActivity: function($activity) {
+                        if ($activity.subject == 'shared_with_by'){
+		    	    $activity.typeicon = 'icon-share_with_me';
+		    	}
 			var $content = ''
 				+ '<div class="box">' + "\n"
 				+ '	<div class="messagecontainer">' + "\n"

@@ -51,3 +51,11 @@
   padding-left: 44px;
 	background-image: url('../img/activity.svg');
 }
+
+
+.icon-share_with_me {
+        background-image: url('../../files/img/share_with_me.svg');
+        -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=50)";
+        filter: alpha(opacity=50);
+        opacity: .5;
+}
