@@ -7,6 +7,6 @@
   background-color: #FFEDD3;
 }
 
-#app-navigation li {
+#app-navigation li > a {
   width: inherit;
 }

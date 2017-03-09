@@ -120,6 +120,7 @@ OC.L10N.register(
     "Are you sure to force delete external file? these files contains external file": "你確定要強制刪除外部檔案？ 這些檔案包含外部儲存的檔案",
     "File Delete": "檔案刪除",
     "If force delete, you will not be able to restore the file or folder in this trashbin.": "永久刪除後，您將無法透過本服務回收桶還原檔案或資料夾。",
-    "Force Delete": "永久刪除"
+    "Force Delete": "永久刪除",
+    "All Activities" : "所有活動"
 },
 "nplurals=1; plural=0;");

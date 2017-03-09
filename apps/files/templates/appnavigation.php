@@ -5,7 +5,7 @@
 				<li data-id="<?php p($item['id']) ?>" class="nav-<?php p($item['id']) ?>">
 						<a href="<?php p(isset($item['href']) ? $item['href'] : '#') ?>"
 							class="nav-icon-<?php p($item['icon'] !== '' ? $item['icon'] : $item['id']) ?> svg">
-							<?php p($item['name']);?>
+							<?php p($l->t($item['name']));?>
 						</a>
 				</li>
 			<?php endif; ?>
@@ -13,7 +13,7 @@
 		<li data-id="activity" class="nav-activity">
 			<a href=""
 				class="nav-icon-activity">
-				<span>所有活動</span>
+				<span><?php p($l->t('All Activities'));?></span>
 			</a>
 		</li>
 	</ul>
