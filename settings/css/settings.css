@@ -21,6 +21,15 @@
 .client-info {
     display: block;
 }
+
 .quota-userWithNotAdmin{
     display:none;
+}
+
+#content .hascontrols {
+    margin-top: 0;
+}
+
+table.grid th {
+    height: 3em;
 }

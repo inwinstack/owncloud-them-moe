@@ -19,7 +19,7 @@
 			<th class="lastLogin" scope="col"><?php p($l->t('Last Login')); ?></th>
 			<th id="headerRemove">&nbsp;</th>
 		<?php else: ?>
-			<th id="Quota" scope="col"><?php p($l->t('Usage')); ?></th>
+			<th id="Quota" style="width:20%;" scope="col"><?php p($l->t('Usage')); ?></th>
 		<?php endif;?>			
 		</tr>
 	</thead>
