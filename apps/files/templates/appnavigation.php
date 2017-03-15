@@ -13,7 +13,7 @@
 		<li data-id="activity" class="nav-activity">
 			<a href=""
 				class="nav-icon-activity">
-				<span><?php p($l->t('All Activities'));?></span>
+				<span><?php p('All Activities');?></span>
 			</a>
 		</li>
 	</ul>
