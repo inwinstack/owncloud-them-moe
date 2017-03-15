@@ -1,4 +1,5 @@
 { "translations": {
+    "Usage": "已使用容量",
     "Quota Stats" : "儲存空間使用量",
     "Get the apps to sync your files" : "下載應用程式",
     "Desktop client" : "桌面代理應用程式",

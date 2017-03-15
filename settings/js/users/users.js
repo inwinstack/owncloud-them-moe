@@ -77,6 +77,8 @@ var UserList = {
 		$tr.data('restoreDisabled', user.isRestoreDisabled);
 		$tr.find('.name').text(user.name);
 		$tr.find('td.displayName > span').text(user.displayname);
+                $tr.find('td.quota-userWithNotAdmin > span').text(t('settings',user.quota));
+		$tr.find('td.displayNameWithNotAdmin > span').text(user.displayname);
 		$tr.find('td.mailAddress > span').text(user.email);
 		$tr.find('td.displayName > .action').tooltip({placement: 'top'});
 		$tr.find('td.mailAddress > .action').tooltip({placement: 'top'});

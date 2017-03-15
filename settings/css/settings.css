@@ -21,3 +21,6 @@
 .client-info {
     display: block;
 }
+.quota-userWithNotAdmin{
+    display:none;
+}
