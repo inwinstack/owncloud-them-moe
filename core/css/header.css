@@ -77,57 +77,59 @@
   float: right;
 }
 
-@media (min-width: 992px) {
-  #header .header-hidden {
-    display: none;
+#header .header-hidden {
+  display: none;
+}
+
+#navigation {
+  background-color: transparent;
+  box-shadow: none;
+  border-radius: 0;
+  display: block !important;
+  top: 0;
+  left: 250px;
+}
+
+#navigation a {
+  width: auto;
+  height: 45px;
+  padding: 5px 12px;
+}
+
+#navigation a span {
+  color: #666;
+  font-size: 120%;
+  width: auto;
+  vertical-align: super;
+  padding-left: 5px;
+}
+
+#navigation a img,
+#navigation a span {
+  opacity: .9;
+}
+
+#navigation a.active {
+  background-color: #B5E3F9;
+  border-bottom: 3px solid #009CBE;
+}
+
+/* loading feedback for apps */
+#navigation .app-loading .icon-loading-dark {
+  display: inline !important;
+  position: absolute;
+  top: 5px;
+  left: 15px;
+  width: 32px;
+  height: 32px;
+}
+
+@media (max-width: 768px) {
+  #header .logo-icon {
+	  width: 115px;
   }
 
   #navigation {
-    background-color: transparent;
-    box-shadow: none;
-    border-radius: 0;
-    display: block !important;
-    top: 0;
-    left: 250px;
-  }
-
-  #navigation a {
-    width: auto;
-    height: 45px;
-    padding: 5px 12px;
-  }
-
-  #navigation a span {
-    color: #666;
-    font-size: 120%;
-    width: auto;
-    vertical-align: super;
-    padding-left: 5px;
-  }
-
-  #navigation a img,
-  #navigation a span {
-    opacity: .9;
-  }
-
-  #navigation a.active {
-    background-color: #B5E3F9;
-    border-bottom: 3px solid #009CBE;
-  }
-
-/* loading feedback for apps */
-  #navigation .app-loading .icon-loading-dark {
-    display: inline !important;
-    position: absolute;
-    top: 5px;
-    left: 15px;
-    width: 32px;
-    height: 32px;
-  }
-}
-
-@media (min-width: 992px) and (max-width: 1200px) {
-  #navigation .app-icon {
-    display: none;
+	  left: 115px;
   }
 }
