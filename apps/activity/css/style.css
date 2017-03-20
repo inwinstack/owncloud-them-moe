@@ -10,52 +10,73 @@
 }
 
 #app-navigation .nav-icon-fileList {
-	background-image: url('../../files/img/folder.svg');
+  background-image: url('../../files/img/folder.svg');
   padding-left: 44px;
 }
 
 #app-navigation 
 .nav-icon-fileList-favorites {
   padding-left: 44px;
-	background-image: url('../../files/img/star.svg');
+  background-image: url('../../files/img/star.svg');
 }
+
 #app-navigation 
 .nav-icon-fileList-sharingin {
   padding-left: 44px;
-	background-image: url('../../files/img/share_with_me.svg');
+  background-image: url('../../files/img/share_with_me.svg');
 }
+
 #app-navigation
 .nav-icon-fileList-sharingout {
   padding-left: 44px;
-	background-image: url('../../files/img/share.svg');
+  background-image: url('../../files/img/share.svg');
 }
+
 #app-navigation 
 .nav-icon-fileList-sharinglinks {
   padding-left: 44px;
-	background-image: url('../../files/img/public.svg');
+  background-image: url('../../files/img/public.svg');
 }
+
 #app-navigation 
 .nav-icon-fileList-extstoragemounts {
   padding-left: 44px;
-	background-image: url('../../files/img/external.svg');
+  background-image: url('../../files/img/external.svg');
 }
+
 #app-navigation 
 .nav-icon-fileList-trashbin {
   padding-left: 44px;
-	background-image: url('../../files/img/delete.svg');
+  background-image: url('../../files/img/delete.svg');
   position: fixed;
-	bottom: 0px;
+  bottom: 0px;
   width: 250px;
 }
+
 #app-navigation 
 .nav-icon-all {
   padding-left: 44px;
-	background-image: url('../img/activity.svg');
+  background-image: url('../img/activity.svg');
 }
 
 .icon-share_with_me {
-        background-image: url('../../files/img/share_with_me.svg');
-        -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=50)";
-        filter: alpha(opacity=50);
-        opacity: .5;
+  background-image: url('../../files/img/share_with_me.svg');
+  -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=50)";
+  filter: alpha(opacity=50);
+  opacity: .5;
 }
+
+.icon-delete-color {
+  background-image: url('../img/delete-color.svg');
+  opacity: .5;
+}
+
+.icon-add-color {
+  background-image: url('../img/add-color.svg');
+  opacity: .5;
+}
+
+.icon-change {
+  background-image: url('../img/change.svg');
+}
+
