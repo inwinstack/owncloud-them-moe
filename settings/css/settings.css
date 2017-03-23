@@ -30,6 +30,10 @@
     margin-top: 0;
 }
 
+#content #controls+.hascontrols {
+    margin-top: 45px;
+}
+
 table.grid th {
     height: 3em;
 }
