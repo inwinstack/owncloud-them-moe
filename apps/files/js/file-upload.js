@@ -420,8 +420,23 @@ OC.Upload = {
 							}
 						};
 
-						OC.Upload.checkExistingFiles(selection, callbacks);
+						if (OC.currentUser == null) {
+							OC.dialogs.prompt(					
+								'Rename anoymous name?',
+								'Modify anoymous Name',
+								function(result, newName) {
+									OC.anoymousUser = newName;
+									OC.Upload.checkExistingFiles(selection, callbacks);
+								},
+								true,
+								'New name is here',
+								false
+							);
+						}
 
+						else {
+							OC.Upload.checkExistingFiles(selection, callbacks);
+						}
 					}
 
 					return true; // continue adding files
@@ -449,7 +464,8 @@ OC.Upload = {
 					addFormData(data.formData, {
 						requesttoken: oc_requesttoken,
 						dir: data.targetDir || FileList.getCurrentDirectory(),
-						file_directory: fileDirectory
+						file_directory: fileDirectory,
+						user: !!OC.anoymousUser ? OC.anoymousUser : OC.currentUser
 					});
 				},
 				fail: function(e, data) {
@@ -543,6 +559,7 @@ OC.Upload = {
 				// add progress handlers
 				fileupload.on('fileuploadadd', function(e, data) {
 					OC.Upload.log('progress handle fileuploadadd', e, data);
+
 					//show cancel button
 					//if (data.dataType !== 'iframe') { //FIXME when is iframe used? only for ie?
 					//	$('#uploadprogresswrapper .stop').show();
