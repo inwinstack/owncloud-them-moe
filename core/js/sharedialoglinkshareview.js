@@ -23,7 +23,7 @@
 			'<label for="linkCheckbox-{{cid}}">{{linkShareLabel}}</label>' +
 			'<br />' +
 			'<label for="linkText-{{cid}}" class="hidden-visually">{{urlLabel}}</label>' +
-'<img class="linkText {{#unless isLinkShare}}hidden{{/unless}}"  src={{qrcodeLinkUrl}} />'+
+//'<img class="linkText {{#unless isLinkShare}}hidden{{/unless}}"  src={{qrcodeLinkUrl}} />'+
 			'<input id="linkText-{{cid}}" class="linkText {{#unless isLinkShare}}hidden{{/unless}}" type="text" readonly="readonly" value="{{shareLinkURL}}" />' +
 
 			'   {{#if showPasswordCheckBox}}' +
