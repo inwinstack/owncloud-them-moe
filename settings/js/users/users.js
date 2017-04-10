@@ -110,7 +110,20 @@ var UserList = {
 		if (subAdminsEl.length > 0) {
 			subAdminsEl.append(subAdminSelect);
 		}
-
+                /* 
+		 * remove user's group action
+		 */
+		if ($tr.find('td.removeusergroup img').length === 0 && OC.currentUser !== user.name) {
+		        var deleteImage = $('<img class="svg action">').attr({
+		            src: OC.imagePath('core', 'actions/delete')
+		        });
+		            var deleteLink = $('<a class="action deleteusergroup">')
+		            .attr({ href: '#', 'original-title': t('settings', 'Delete')})
+		            .append(deleteImage);
+		            $tr.find('td.removeusergroup').append(deleteLink);
+		} else if (OC.currentUser === user.name) {
+		        $tr.find('td.removeusergroup a').remove();
+		}
 		/**
 		 * remove action
 		 */
@@ -362,6 +375,28 @@ var UserList = {
 	},
 	getRestoreDisabled: function(element) {
 		return ($(element).closest('tr').data('restoreDisabled') || '');
+	},
+        initDeleteUserGroupHandling: function() {
+	    $userListBody.on('click', '.deleteusergroup', function () {
+	    // Call function for handling delete/undo
+	    var user = UserList.getUID(this);
+	    var activeGroup = document.getElementsByClassName("isgroup active");
+	    if (activeGroup.length == 1){
+	        var group = activeGroup[0].getAttribute('data-gid');
+	        $.post(
+	        OC.filePath('settings', 'ajax', 'removeusergroup.php'),{username: user,group: group},
+	        function (response) {
+	            if (response.status === 'success') {
+	                UserList.getRow(user).hide();
+	                var index;
+	                var groups = document.getElementsByClassName("isgroup");
+	                for (index = 0; index < groups.length; index++){
+	                    groups[index].children[1].innerText = groups[index].children[1].innerText -1;
+	                }
+	            }
+	         });
+	    }
+	    });
 	},
 	initDeleteHandling: function() {
 		//set up handler

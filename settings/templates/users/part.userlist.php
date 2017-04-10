@@ -20,6 +20,7 @@
 			<th id="headerRemove">&nbsp;</th>
 		<?php else: ?>
 			<th id="Quota" style="width:20%;" scope="col"><?php p($l->t('Usage')); ?></th>
+                        <th>&nbsp;</th>
 		<?php endif;?>			
 		</tr>
 	</thead>
@@ -72,6 +73,7 @@
     		<?php else: ?>
     			<td class="displayNameWithNotAdmin"><span></span></td>
     			<td class="quota quota-userWithNotAdmin"><span></span></td>
+                        <td class="removeusergroup"></td>
 			<?php endif;?>
 		</tr>
 	</tbody>
