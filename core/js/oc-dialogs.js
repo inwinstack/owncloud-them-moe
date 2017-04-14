@@ -520,7 +520,8 @@ var OCdialogs = {
           $('.buttonrow-tooltip').hide();
           $('.fourbuttons').hide();
 
-          if(!$('.twobuttons').length) {
+          // determine when anoymousUser uploading file, rename window appends again
+          if(!$('.twobuttons').length || OC.anoymousUser != null) {
             
             var div = $('<div>').addClass('oc-dialog-buttonrow twobuttons');
 
