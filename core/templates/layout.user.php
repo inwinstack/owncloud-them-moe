@@ -88,12 +88,14 @@
 						</a>
 					</li>
 				<?php endforeach; ?>
-                                        <li>
-						<a target="_blank" href="<?php p(\OC_Helper::linkToRoute("sharing_group.page.index")); ?>">
-							<img class="svg" alt="" src="<?php print_unescaped(image_path('sharing_group', 'sharning-group.svg')); ?>">
-							<?php p($l->t('Sharing Groups'));?>
-						</a>
-					</li>
+					<?php if (\OC::$server->getAppManager()->isEnabledForUser('sharing_group')): ?>
+    					<li>
+    						<a target="_blank" href="<?php p(\OC_Helper::linkToRoute("sharing_group.page.index")); ?>">
+    							<img class="svg" alt="" src="<?php print_unescaped(image_path('sharing_group', 'sharning-group.svg')); ?>">
+    							<?php p($l->t('Sharing Groups'));?>
+    						</a>
+    					</li>
+					<?php endif; ?>
 					<li>
 						<a id="logout" <?php print_unescaped(OC_User::getLogoutAttribute()); ?>>
 							<img class="svg" alt="" src="<?php print_unescaped(image_path('', 'actions/logout.svg')); ?>">
