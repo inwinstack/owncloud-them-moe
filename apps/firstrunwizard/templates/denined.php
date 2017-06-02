@@ -24,7 +24,7 @@
     <link rel="stylesheet" href="themes/MOE/core/css/header.css" media="screen">
     <link rel="stylesheet" href="themes/MOE/core/css/icons.css" media="screen">
     <link rel="stylesheet" href="themes/MOE/core/css/apps.css" media="screen">
-    <link rel="stylesheet" href="apps/singlesigon/css/styles.css" media="screen">
+
     <!--
     <link rel="stylesheet" href="login/styles/vendor/bootstrap.css" />
     <link rel="stylesheet" href="login/styles/vendor/font-awesome.css" />
