@@ -23,7 +23,7 @@
 }
 </style>
 
-<div class="terms-of-use" style="padding: 20px;">
+<div class="terms-of-use" id="printableArea" style="padding: 20px;">
     <header>
         <h1 style="text-align: center;">教育部雲端儲存應用服務使用規範</h1>
     </header>
@@ -93,3 +93,6 @@
         </ol>
     </p>
 </div>
+<input id="printWizard" type="button" value=<?php p($l->t('Print')); ?> />
+<input id="acceptWizard" type="button" value=<?php p($l->t('Accept')); ?> />
+<input id="notAcceptWizard" type="button" value=<?php p($l->t("Not accept")); ?> />
