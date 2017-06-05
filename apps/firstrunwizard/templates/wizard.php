@@ -21,6 +21,18 @@
     list-style-type: circle;
     padding: .3em 0 0 2em;
 }
+#printWizard {
+  float: left;
+  background: #fff;
+  border: 0;
+  color: #18A6C4;
+}
+
+#acceptWizard {
+  width: 100px;
+  background: #18A6C4;
+  color: #fff;
+}
 </style>
 
 <div class="terms-of-use" id="printableArea" style="padding: 20px;">
@@ -93,6 +105,9 @@
         </ol>
     </p>
 </div>
+
+<div class="center">
 <input id="printWizard" type="button" value=<?php p($l->t('Print')); ?> />
 <input id="acceptWizard" type="button" value=<?php p($l->t('Accept')); ?> />
 <input id="notAcceptWizard" type="button" value=<?php p($l->t("Not accept")); ?> />
+</div>
