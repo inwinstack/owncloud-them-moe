@@ -1,3 +1,11 @@
+<?php
+require_once 'lib/base.php';
+if(!OC_User::isLoggedIn()) {
+    header("Location: ".\OC_Util::getDefaultPageUrl());
+    die();
+}
+?>
+
 <html>
 <head>
     <meta charset="UTF-8">
@@ -50,7 +58,6 @@
     <footer role="contentinfo">
         <div class="footer-img"></div>
         <div style="display: inline-block">
-            請使用教育體系 OpenID 帳號進行登入<br>
             Copyright © Ministry of Education. All rigths reserved.
         </div>
     </footer>
