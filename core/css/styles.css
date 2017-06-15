@@ -10,6 +10,10 @@ body {
   margin: 0px auto 32px;
 }
 
+#body-login #header {
+  padding-top: 60px;
+}
+
 .searchbox input[type="search"] {
   background: transparent url(../img/actions/search-moe.svg) no-repeat 6px center;
 }
@@ -26,13 +30,43 @@ body {
   border-bottom: 1px solid #eee;
 }
 
+.login-text {
+  color: #555;
+}
+
+.login-local {
+  margin-top: 10px;
+  width: 95%;
+}
+
+.foot {
+  padding: 12px 0;
+}
+
 .footer-img {
   display: inline-block;
   content: url(../img/moe_logo.png);
   height: 65%;
+  vertical-align: middle;
+}
+
+.footer-text {
+  display: inline-block;
 }
   
 .oc-dialog-buttonrow button {
   width: 70px;
   height: 35px;
+}
+
+.mail-edu {
+  background: #FFD800;
+  color: #333;
+  width: 90%;
+}
+
+.mail-edu:hover {
+  background: #ffe037;
+  border-color: #ddd;
+  color: #111;
 }
