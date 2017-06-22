@@ -9,6 +9,7 @@
 
 <div id="app-navigation">
 	<ul>
+        <li><a href="#personal"><?php p($l->t('Personal')); ?></a></li>
         <li><a href="#quota-stats"><?php p($l->t('Quota Stats')); ?></a></li>
         <li><a href="#avatar"><?php p($l->t('Profile picture')); ?></a></li>
         <li><a href="#goto-訊息通知"><?php p($l->t('Notifications')); ?></a></li>
@@ -26,6 +27,16 @@
 </div>
 
 <div id="app-content">
+
+<div id="personal" class="section" style="padding: 30px 30px 0;margin-bottom: -15px;">
+    <h2><?php p($l->t('Personal')); ?></h2>
+    <p>
+        <?php print_unescaped("<strong>".$l->t("Account")."</strong>". ' : ' . OC_User::getUser());?>
+    </p>
+    <p>
+        <?php print_unescaped("<strong>".$l->t("Displayname")."</strong>". ' : ' . OC_User::getDisplayName(OC_User::getUser()));?>
+    </p>
+</div>
 
 <div id="quota-stats" class="section" style="padding: 30px 30px 0;margin-bottom: -15px;">
     <h2><?php p($l->t('Quota Stats')); ?></h2>

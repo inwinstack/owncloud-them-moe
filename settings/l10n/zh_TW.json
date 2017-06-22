@@ -1,4 +1,7 @@
 { "translations": {
+    "Personal" : "帳號資訊",
+    "Account" : "帳號",
+    "Displayname" : "全名",
     "Usage": "已使用容量",
     "Quota Stats" : "儲存空間使用量",
     "Get the apps to sync your files" : "下載應用程式",
