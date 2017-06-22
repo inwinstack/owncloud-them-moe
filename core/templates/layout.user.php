@@ -80,6 +80,7 @@
 				<div id="expanddiv">
 				<ul>
 				<?php foreach($_['settingsnavigation'] as $entry):?>
+                                        <?php if ( $entry["id"] != 'help'): ?>
 					<li>
 						<a target="_blank" href="<?php print_unescaped($entry['href']); ?>"
 							<?php if( $entry["active"] ): ?> class="active"<?php endif; ?>>
@@ -87,6 +88,7 @@
 							<?php p($entry['name']) ?>
 						</a>
 					</li>
+                                        <?php endif; ?>
 				<?php endforeach; ?>
 					<?php if (\OC::$server->getAppManager()->isEnabledForUser('sharing_group')): ?>
     					<li>
