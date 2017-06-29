@@ -13,7 +13,7 @@
         <li><a href="#quota-stats"><?php p($l->t('Quota Stats')); ?></a></li>
         <li><a href="#avatar"><?php p($l->t('Profile picture')); ?></a></li>
         <li><a href="#goto-訊息通知"><?php p($l->t('Notifications')); ?></a></li>
-        <li><a href="#clientsbox"><?php p($l->t('Get the apps to sync your files'));?></a></li>
+        <!-- <li><a href="#clientsbox"><?php p($l->t('Get the apps to sync your files'));?></a></li> -->
         <li><a href="#terms-of-service"><?php p($l->t('Terms of service'));?></a></li>
 	
         <?php foreach($_['forms'] as $form) {
@@ -145,7 +145,7 @@ $versions_percent  = ($versions == 0.00 && $version_size > 0) ? 0.01 : $versions
 	</form>
 </div>
 <?php endif; ?>
-
+<!--
 <div id="clientsbox" class="section">
 	<h2><?php p($l->t('Get the apps to sync your files'));?></h2>
     
@@ -174,7 +174,7 @@ $versions_percent  = ($versions == 0.00 && $version_size > 0) ? 0.01 : $versions
         <span class="client-info">iOS 8.0+</span>
     </a>
 </div>
-
+-->
 <div id="terms-of-service" class="section">
 	<h2><?php p($l->t('Terms of service'));?></h2>
     

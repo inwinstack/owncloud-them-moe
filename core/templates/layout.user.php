@@ -98,6 +98,12 @@
     						</a>
     					</li>
 					<?php endif; ?>
+                                        <li>
+                                            <a target="_blank" href="<?php p(\OC_Helper::linkToRoute("settings_system")); ?>">
+                                            <img class="svg" alt="" src="<?php print_unescaped(image_path('settings', 'help.svg')); ?>">
+                                            <?php p($l->t('System Information'));?>
+                                            </a>
+                                        </li>
 					<li>
 						<a id="logout" <?php print_unescaped(OC_User::getLogoutAttribute()); ?>>
 							<img class="svg" alt="" src="<?php print_unescaped(image_path('', 'actions/logout.svg')); ?>">
