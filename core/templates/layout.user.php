@@ -93,7 +93,7 @@
 					<?php if (\OC::$server->getAppManager()->isEnabledForUser('sharing_group')): ?>
     					<li>
     						<a target="_blank" href="<?php p(\OC_Helper::linkToRoute("sharing_group.page.index")); ?>">
-    							<img class="svg" alt="" src="<?php print_unescaped(image_path('sharing_group', 'sharing-group.svg')); ?>">
+    							<img class="svg" alt="" src="<?php print_unescaped(image_path('core', 'sharing-group.svg')); ?>">
     							<?php p($l->t('Sharing Groups'));?>
     						</a>
     					</li>
