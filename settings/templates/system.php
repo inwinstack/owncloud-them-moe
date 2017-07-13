@@ -1,4 +1,11 @@
 <?php
+OC_Util::addScript('settings','raphael');
+OC_Util::addScript('settings','Treant');
+OC_Util::addScript('settings','connectors');
+OC_Util::addStyle('settings','connectors');
+OC_Util::addStyle('settings','perfect-scrollbar');
+OC_Util::addStyle('settings','Treant');
+OC_Util::addScript('settings','generateTree');
 $defaults = new OC_Defaults();
 $config = \OC::$server->getConfig();
 $clients = array(
@@ -55,6 +62,7 @@ $clients = array(
                 </div>
             </div>
         </div>
+        <div class="chart" id="OrganiseChart-big-commpany"></div>
     </div>
 </div>
 
