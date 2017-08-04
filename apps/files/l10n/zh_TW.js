@@ -121,6 +121,8 @@ OC.L10N.register(
     "File Delete": "檔案刪除",
     "If force delete, you will not be able to restore the file or folder in this trashbin.": "永久刪除後，您將無法透過本服務回收桶還原檔案或資料夾。",
     "Force Delete": "永久刪除",
-    "All Activities" : "所有活動"
+    "All Activities" : "所有活動",
+    "Error deleting file."     : "無法刪除檔案",
+    "Error renaming file."     : "無法重新命名檔案"
 },
 "nplurals=1; plural=0;");
