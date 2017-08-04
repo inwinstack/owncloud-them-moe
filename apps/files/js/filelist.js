@@ -452,6 +452,17 @@
 		 */
 		_onUrlChanged: function(e) {
 			if (e && e.dir) {
+                                var isLogin = $.ajax({url: OC.linkToOCS('apps/files/api/v1') + 'checkloginstatus',
+		    	    		type : 'GET',
+		    	    		async:false,
+		    	    		data: {
+		    	    		    format: 'json'
+                        		},
+		    		});
+		    	        if (isLogin.responseJSON.ocs.data != 'true'){
+				    location.reload();
+				    return;
+		    	        }
 				this.changeDirectory(e.dir, false, true);
 			}
 		},
