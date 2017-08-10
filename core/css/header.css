@@ -133,3 +133,8 @@
 	  left: 115px;
   }
 }
+
+#header .avatardiv.avatardiv-shown + #expandDisplayName {
+        display: inline;
+}
+

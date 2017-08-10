@@ -178,7 +178,7 @@ $versions_percent  = ($versions == 0.00 && $version_size > 0) ? 0.01 : $versions
 <div id="terms-of-service" class="section">
 	<h2><?php p($l->t('Terms of service'));?></h2>
     
-	<p><?php p($l->t('Storage quota is up to 5GB for each user.'));?><?php p($l->t('Retired teacher will be disabled in 6 months, please back up your files during the time.'));?></p>
+        <p><?php p($l->t('This cloud storage service provides user storage space of 30GB'));?></p>
 </div>
 
 </div>
