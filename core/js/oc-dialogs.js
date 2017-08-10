@@ -27,6 +27,7 @@
  */
 var OCdialogs = {
 	// dialog button types
+	NO_YES_BUTTONS:		69,
 	YES_NO_BUTTONS:		70,
 	OK_BUTTONS:		71,
 	// used to name each dialog
@@ -67,7 +68,7 @@ var OCdialogs = {
 		this.message(text, title, 'info', OCdialogs.OK_BUTTON, callback, modal);
 	},
 	/**
-	* displays confirmation dialog
+	* displays confirmation dialog with default Yes
 	* @param text content of dialog
 	* @param title dialog title
 	* @param callback which will be triggered when user presses YES or NO
@@ -80,6 +81,25 @@ var OCdialogs = {
 			title,
 			'notice',
 			OCdialogs.YES_NO_BUTTONS,
+			callback,
+			modal
+		);
+	},
+
+	/**
+	* displays confirmation dialog with default No
+	* @param text content of dialog
+	* @param title dialog title
+	* @param callback which will be triggered when user presses YES or NO
+	*        (true or false would be passed to callback respectively)
+	* @param modal make the dialog modal
+	*/
+	confirmN:function(text, title, callback, modal) {
+		return this.message(
+			text,
+			title,
+			'notice',
+			OCdialogs.NO_YES_BUTTONS,
 			callback,
 			modal
 		);
@@ -280,6 +300,27 @@ var OCdialogs = {
 						$(dialogId).ocdialog('close');
 					},
 					defaultButton: true
+				}];
+				break;
+			case OCdialogs.NO_YES_BUTTONS:
+				buttonlist = [{
+					text: t('core', 'No'),
+					click: function(){
+						if (callback !== undefined) {
+							callback(false);
+						}
+						$(dialogId).ocdialog('close');
+					},
+					defaultButton: true
+				},
+				{
+					text: t('core', 'Yes'),
+					click: function(){
+						if (callback !== undefined) {
+							callback(true);
+						}
+						$(dialogId).ocdialog('close');
+					}
 				}];
 				break;
 			case OCdialogs.OK_BUTTON:
