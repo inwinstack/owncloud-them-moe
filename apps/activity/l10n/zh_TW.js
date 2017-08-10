@@ -18,6 +18,7 @@ OC.L10N.register(
     "All files" : "所有檔案",
     "Favorites" : "我的最愛",
     "Shared with you" : "別人分享給我",
-    "Shared with others" : "我分享給別人"
+    "Shared with others" : "我分享給別人",
+    "Error loading activities" : "無法讀取所有活動紀錄"
 },
 "nplurals=1; plural=0;");
