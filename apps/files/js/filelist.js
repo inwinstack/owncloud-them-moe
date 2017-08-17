@@ -460,8 +460,7 @@
                         		},
 		    		});
 		    	        if (isLogin.responseJSON.ocs.data != 'true'){
-				    location.reload();
-				    return;
+                                    location.replace(OC.getProtocol('') +'://' +OC.getHost());
 		    	        }
 				this.changeDirectory(e.dir, false, true);
 			}
