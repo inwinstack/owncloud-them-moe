@@ -88,7 +88,6 @@ $versions_percent  = ($versions == 0.00 && $version_size > 0) ? 0.01 : $versions
 		<div class="inlineblock button" id="removeavatar"><?php p($l->t('Remove image')); ?></div>
 		<input type="file" name="files[]" id="uploadavatar" class="hiddenuploadfield">
 		<br>
-		<?php p($l->t('Either png or jpg. Ideally square but you will be able to crop it. The file is not allowed to exceed the maximum size of 20 MB.')); ?>
 		<?php else: ?>
 		<?php p($l->t('Your avatar is provided by your original account.')); ?>
 		<?php endif; ?>
