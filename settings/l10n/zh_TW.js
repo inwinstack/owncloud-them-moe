@@ -21,8 +21,9 @@ OC.L10N.register(
     "Update" : "上傳照片",
     "Select from cloud" : "從雲端儲存選取",
     "Choose" : "選擇",
-    "The file is not allowed to exceed the maximum size of 20 MB." : "上傳的照片不得超過 20 MB",
+    "The file is not allowed to exceed the maximum size of 20 MB." : "上船的照片不得超過 20 MB",
     "Upload a pic from local" : "從電腦中選取一張照片",
     "Setting as profile picture" : "設為大頭照",
+    "Please pick a pic." : "請選擇一張照片",
 },
 "nplurals=1; plural=0;");

@@ -228,10 +228,17 @@ function tab_3() {
       OC.dialogs._fillFilePicker('');
     })
 
+    var mesg = $('<span>').text(t('settings', 'Please pick a pic.')).css({color: 'red', float: 'right', display: 'block', lineHeight: '31px',  margin: '3px 15px', size: '1.5rem', display: 'none'})
+
     var button = $('<button class="primary">').css({float: 'right'}).text(t('settings', 'Choose')).click(function() {
       var datapath = OC.dialogs.$filePicker.data('path');
 
       datapath += '/' + OC.dialogs.$filelist.find('.filepicker_element_selected .filename').text();
+
+      if($('.filepicker_element_selected').length == 0) {
+        mesg.show()
+        return ;
+      }
 
       $.ajax({
         type: "POST",
@@ -257,7 +264,7 @@ function tab_3() {
       });
     })
 
-    $('#oc-dialog-filepicker-content').append(button)
+    $('#oc-dialog-filepicker-content').append(button, mesg)
   })
 }
 
