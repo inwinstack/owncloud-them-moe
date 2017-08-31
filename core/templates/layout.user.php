@@ -101,7 +101,7 @@
                                         <li>
                                             <a target="_blank" href="<?php p(\OC_Helper::linkToRoute("settings_system")); ?>">
                                             <img class="svg" alt="" src="<?php print_unescaped(image_path('settings', 'help.svg')); ?>">
-                                            <?php p($l->t('System Information'));?>
+                                            <?php p($l->t('Downloads'));?>
                                             </a>
                                         </li>
 					<li>

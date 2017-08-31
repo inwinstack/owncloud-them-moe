@@ -5,6 +5,7 @@
 
 /** @var $_ array */
 /** @var $_['urlGenerator'] */
+OC_Util::addScript('settings','changeliorder');
 ?>
 
 <div id="app-navigation">
@@ -14,7 +15,7 @@
         <li><a href="#avatar"><?php p($l->t('Profile picture')); ?></a></li>
         <li><a href="#goto-訊息通知"><?php p($l->t('Notifications')); ?></a></li>
         <!-- <li><a href="#clientsbox"><?php p($l->t('Get the apps to sync your files'));?></a></li> -->
-        <li><a href="#terms-of-service"><?php p($l->t('Terms of service'));?></a></li>
+        <li id="serviceindex"><a href="#terms-of-service"><?php p($l->t('Terms of service'));?></a></li>
 	
         <?php foreach($_['forms'] as $form) {
             if (isset($form['anchor']) and !in_array($form['anchor'], ["clientsbox", "passwordform", "goto-訊息通知"])) {
