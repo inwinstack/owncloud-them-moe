@@ -299,7 +299,7 @@ $(document).ready(function () {
               background: 'white',
               width: '600px',
               left: 'calc((100vw - 600px) / 2)',
-              height: '90vh',
+              height: '530px',
               top: '5vh',
               zIndex: '9990',
             },
