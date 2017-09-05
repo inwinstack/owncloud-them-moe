@@ -19,6 +19,9 @@ OC.L10N.register(
     "Favorites" : "我的最愛",
     "Shared with you" : "別人分享給我",
     "Shared with others" : "我分享給別人",
-    "Error loading activities" : "無法讀取所有活動紀錄"
+    "Error loading activities" : "無法讀取所有活動紀錄",
+    "show more activity data" : "顯示更多活動記錄",
+    "hide more activity data" : "隱藏更多活動記錄"
+
 },
 "nplurals=1; plural=0;");

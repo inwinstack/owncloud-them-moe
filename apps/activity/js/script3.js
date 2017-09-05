@@ -29,7 +29,7 @@ $(function(){
 				return;
 			}
 
-			if (filter.indexOf('fileList') !== -1) {
+      if (filter.indexOf('fileList') !== -1) {
 					if (filter === 'fileList') {
 						window.location.href = OCActivity.Filter.navigation.context.URL.replace(/activity\/\?[a-zA-Z]*=[a-zA-Z]*/g, 'files');
 						return;
@@ -84,13 +84,14 @@ $(function(){
 			if (!OCActivity.InfinitScrolling.ignoreScroll && OCActivity.InfinitScrolling.content.scrollTop() +
 			 OCActivity.InfinitScrolling.content.height() > OCActivity.InfinitScrolling.container.height() - 100) {
 				OCActivity.Filter.currentPage++;
+        
 
 				$.get(
 					OC.generateUrl('/apps/activity/activities/fetch'),
 					'filter=' + OCActivity.Filter.filter + '&page=' + OCActivity.Filter.currentPage,
 					function (data) {
 						OCActivity.InfinitScrolling.handleActivitiesCallback(data);
-				    OCActivity.InfinitScrolling.ignoreScroll = !data.length;
+            OCActivity.InfinitScrolling.ignoreScroll = !data.lenth;
 					}
 				);
 			}
@@ -104,39 +105,41 @@ $(function(){
 				for (var i = 0; i < data.length; i++) {
 					var $activity = data[i];
 					this.appendActivityToContainer($activity);
-        }
+				}
 
 				// Continue prefill
 				this.prefill();
-         
+        
+
         if(OCActivity.Filter.currentPage >= 0) {
           
-
           $('.activity-section').each(function() {
+              
             var boxLength = $(this).find('.box').length + $(this).find('.box:hidden').length;
             var hasButton  = $(this).find('.showORhide_activity').length ? true :false;
-            var boxGroup = $('<div class="boxGroup">');
             
-            if(!$(this).find('.boxGroup').length) {
-              $(this).find('.boxcontainer').after(boxGroup);
-            }
-            
-            $(this).find('.boxGroup').append($(this).find('.box'));
-
-            if(boxLength > 10) {
+            if(boxLength > 5) {
+              console.dir(hasButton)
               !hasButton && $(this).append(button.clone());
                
               $(this).find('.box').each(function(index) {
-                index >= 10 && $(this).hide();
+                index >= 5 && $(this).hide();
               });
+
+              if($(this).find('.showORhide_activity').next().hasClass('box')) {
+                var box = $(this).find('.showORhide_activity').next();
+                $(this).find('.showORhide_activity').before(box); 
+                
+              } 
+
             }
             
           });
         }
-
 			} else if (OCActivity.Filter.currentPage == 1) {
 				// First page is empty - No activities :(
 				var $emptyContent = $('#emptycontent');
+
 				$emptyContent.removeClass('hidden');
 				if (OCActivity.Filter.filter == 'all') {
 					$emptyContent.find('p').text(t('activity', 'This stream will show events like additions, changes & shares'));
@@ -150,6 +153,9 @@ $(function(){
 				$('#no_more_activities').removeClass('hidden');
 				$('#loading_activities').addClass('hidden');
 			}
+      
+      
+      
 		},
 
 		appendActivityToContainer: function ($activity) {
@@ -163,7 +169,7 @@ $(function(){
 			if ($lastGroup.data('date') !== $relativeTimestamp) {
 				var $content = '<div class="section activity-section group" data-date="' + escapeHTML($relativeTimestamp) + '">' + "\n"
 					+'	<h2>'+"\n"
-					+'		<span>' + escapeHTML($readableTimestamp) + '</span>' + "\n"
+					+'		<span class="has-tooltip" title="' + escapeHTML($readableTimestamp) + '">' + escapeHTML($relativeTimestamp) + '</span>' + "\n"
 					+'	</h2>' + "\n"
 					+'	<div class="boxcontainer">' + "\n"
 					+'	</div>' + "\n"
@@ -176,8 +182,6 @@ $(function(){
 		},
 
 		addActivity: function($activity) {
-      var readableDayTimestamp = String($activity.readableDateTimestamp).split(" ")[1];
-      //console.dir(readableDayTimestamp[1]);
 			var $content = ''
 				+ '<div class="box">' + "\n"
 				+ '	<div class="messagecontainer">' + "\n"
@@ -190,8 +194,8 @@ $(function(){
 				+ (($activity.link) ? '			</a>' + "\n" : '')
 				+ '		</div>' + "\n"
 
-				+'		<span class="activitytime">' + "\n"
-				+ '			' + escapeHTML(readableDayTimestamp) + "\n"
+				+'		<span class="activitytime has-tooltip" title="' + escapeHTML($activity.readableDateTimestamp) + '">' + "\n"
+				+ '			' + escapeHTML($activity.relativeDateTimestamp) + "\n"
 				+'		</span>' + "\n";
 
 			if ($activity.message) {
@@ -200,7 +204,15 @@ $(function(){
 					+'</div>' + "\n";
 			}
 
-			
+			if ($activity.previews && $activity.previews.length) {
+				$content += '<br />';
+				for (var i = 0; i < $activity.previews.length; i++) {
+					var $preview = $activity.previews[i];
+					$content += (($preview.link) ? '<a href="' + $preview.link + '">' + "\n" : '')
+						+ '<img class="preview' + (($preview.isMimeTypeIcon) ? ' preview-mimetype-icon' : '') + '" src="' + $preview.source + '" alt=""/>' + "\n"
+						+ (($preview.link) ? '</a>' + "\n" : '')
+				}
+			}
 
 			$content += '	</div>' + "\n"
 				+'</div>';
@@ -253,43 +265,25 @@ $(function(){
 	});
 
   $('.app-activity').delegate('.showORhide_activity','click', function() {
-    $(this).closest('.activity-section').find('.showORhide_activity').show();
-    
     if($(this).data('value') === 'show') {
 
-      $(this).closest('.activity-section').find('.box:hidden').each(function(index) {
-        
-        index <= 10 && $(this).show();
-      
+      $(this).closest('.activity-section').find('.box:hidden').show();
+
+      $(this).data('value','hide');
+      $(this).text(t('activity', 'hide more activity data'))
+
+
+    } else {
+      $(this).closest('.activity-section').find('.box').each(function(index) {
+        index >= 5 && $(this).hide();
       });
 
-      $(this).closest('.activity-section').find('.showORhide_activity').length < 2 &&
-        $(this).after($('<button class="showORhide_activity" data-value="hide">').text(t('activity','hide more activity data')));
-
-      if(!$(this).closest('.activity-section').find('.box:hidden').length) {
-        
-        $(this).hide();
-      
-      }
-    } else {
-      console.dir(111);
-      var visibleBox = $(this).closest('.activity-section').find('.box:visible');
-
-      if(visibleBox.length > 10) {
-        for(var i = 1; i<= 10 ; i++) {
-          $(visibleBox[visibleBox.length - i]).hide();
-          if(visibleBox.length - i === 10) break;
-        }
-      }
-      
-
-      if($(this).closest('.activity-section').find('.box:visible').length <= 10) {
-        $(this).hide();
-
-      }
+      $(this).data('value','show');
+      $(this).text(t('activity', 'show more activity data'))
     }
   
   });
 
+  
 });
 
