@@ -82,7 +82,7 @@
 				<?php foreach($_['settingsnavigation'] as $entry):?>
                                         <?php if ( $entry["id"] != 'help'): ?>
 					<li>
-						<a target="_blank" href="<?php print_unescaped($entry['href']); ?>"
+						<a target=<?php print_unescaped($entry["id"])?> href="<?php print_unescaped($entry['href']); ?>"
 							<?php if( $entry["active"] ): ?> class="active"<?php endif; ?>>
 							<img class="svg" alt="" src="<?php print_unescaped($entry['icon']); ?>">
 							<?php p($entry['name']) ?>
