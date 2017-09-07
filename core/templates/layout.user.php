@@ -82,7 +82,7 @@
 				<?php foreach($_['settingsnavigation'] as $entry):?>
                                         <?php if ( $entry["id"] != 'help'): ?>
 					<li>
-						<a target="_blank" href="<?php print_unescaped($entry['href']); ?>"
+						<a target=<?php print_unescaped($entry["id"])?> href="<?php print_unescaped($entry['href']); ?>"
 							<?php if( $entry["active"] ): ?> class="active"<?php endif; ?>>
 							<img class="svg" alt="" src="<?php print_unescaped($entry['icon']); ?>">
 							<?php p($entry['name']) ?>
@@ -92,14 +92,14 @@
 				<?php endforeach; ?>
 					<?php if (\OC::$server->getAppManager()->isEnabledForUser('sharing_group')): ?>
     					<li>
-    						<a target="_blank" href="<?php p(\OC_Helper::linkToRoute("sharing_group.page.index")); ?>">
+    						<a target="sharing_group" href="<?php p(\OC_Helper::linkToRoute("sharing_group.page.index")); ?>">
     							<img class="svg" alt="" src="<?php print_unescaped(image_path('core', 'sharing-group.svg')); ?>">
     							<?php p($l->t('Sharing Groups'));?>
     						</a>
     					</li>
 					<?php endif; ?>
                                         <li>
-                                            <a target="_blank" href="<?php p(\OC_Helper::linkToRoute("settings_system")); ?>">
+                                            <a target="system_downloads" href="<?php p(\OC_Helper::linkToRoute("settings_system")); ?>">
                                             <img class="svg" alt="" src="<?php print_unescaped(image_path('settings', 'help.svg')); ?>">
                                             <?php p($l->t('Downloads'));?>
                                             </a>

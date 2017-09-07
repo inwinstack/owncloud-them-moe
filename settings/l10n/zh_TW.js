@@ -17,5 +17,14 @@ OC.L10N.register(
     "Retired teacher will be disabled in 6 months, please back up your files during the time." : "教師用戶於離職或退休後六個月，本服務將逕行停用，請用戶務必於期限內完成資料備份。",
     "add group" : "新增群組",
     "no group" : "無群組",
+    "Change" : "變更",
+    "Update" : "上傳照片",
+    "Select from cloud" : "從雲端儲存選取",
+    "Choose" : "選擇",
+    "The file is not allowed to exceed the maximum size of 20 MB." : "上傳的照片不得超過 20 MB",
+    "Upload a pic from local" : "從電腦中選取一張照片",
+    "Setting as profile picture" : "設為大頭照",
+    "Please pick a pic." : "請選擇一張照片",
+    "Cancel" : "取消"
 },
 "nplurals=1; plural=0;");

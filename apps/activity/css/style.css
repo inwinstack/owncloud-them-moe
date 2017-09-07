@@ -43,6 +43,12 @@
   padding-left: 44px;
   background-image: url('../../files/img/external.svg');
 }
+#app-navigation
+.nav-icon-fileList-video{
+  padding-left: 44px;
+  background-image: url('../../moe_video/img/play-icon.png');
+}
+
 
 #app-navigation 
 .nav-icon-fileList-trashbin {

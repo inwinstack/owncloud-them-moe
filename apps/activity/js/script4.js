@@ -28,8 +28,7 @@ $(function(){
 			if (filter === this.filter) {
 				return;
 			}
-
-			if (filter.indexOf('fileList') !== -1) {
+      if (filter.indexOf('fileList') !== -1) {
 					if (filter === 'fileList') {
 						window.location.href = OCActivity.Filter.navigation.context.URL.replace(/activity\/\?[a-zA-Z]*=[a-zA-Z]*/g, 'files');
 						return;
@@ -90,7 +89,7 @@ $(function(){
 					'filter=' + OCActivity.Filter.filter + '&page=' + OCActivity.Filter.currentPage,
 					function (data) {
 						OCActivity.InfinitScrolling.handleActivitiesCallback(data);
-				    OCActivity.InfinitScrolling.ignoreScroll = !data.length;
+            OCActivity.InfinitScrolling.ignoreScroll = !data.lenth;
 					}
 				);
 			}
@@ -98,41 +97,15 @@ $(function(){
 
 		handleActivitiesCallback: function (data) {
 			var $numActivities = data.length;
-      var button = $('<button class="showORhide_activity">').attr({'data-value': 'show'}).text(t('activity','show more activity data'));
 
 			if ($numActivities > 0) {
 				for (var i = 0; i < data.length; i++) {
 					var $activity = data[i];
 					this.appendActivityToContainer($activity);
-        }
+				}
 
 				// Continue prefill
 				this.prefill();
-         
-        if(OCActivity.Filter.currentPage >= 0) {
-          
-
-          $('.activity-section').each(function() {
-            var boxLength = $(this).find('.box').length + $(this).find('.box:hidden').length;
-            var hasButton  = $(this).find('.showORhide_activity').length ? true :false;
-            var boxGroup = $('<div class="boxGroup">');
-            
-            if(!$(this).find('.boxGroup').length) {
-              $(this).find('.boxcontainer').after(boxGroup);
-            }
-            
-            $(this).find('.boxGroup').append($(this).find('.box'));
-
-            if(boxLength > 10) {
-              !hasButton && $(this).append(button.clone());
-               
-              $(this).find('.box').each(function(index) {
-                index >= 10 && $(this).hide();
-              });
-            }
-            
-          });
-        }
 
 			} else if (OCActivity.Filter.currentPage == 1) {
 				// First page is empty - No activities :(
@@ -152,11 +125,13 @@ $(function(){
 			}
 		},
 
-		appendActivityToContainer: function ($activity) {
+
+    appendActivityToContainer: function ($activity) {
 			this.makeSureDateGroupExists($activity.relativeTimestamp, $activity.readableTimestamp);
 			this.addActivity($activity);
+      
 		},
-
+    
 		makeSureDateGroupExists: function($relativeTimestamp, $readableTimestamp) {
 			var $lastGroup = this.container.children().last();
 
@@ -174,11 +149,53 @@ $(function(){
 				this.lastDateGroup = $content;
 			}
 		},
+    
+    activityMsgHandler: function(msg) {
+      var arr = String(msg).split('and');
+      
+      if(arr.length  > 1) {
+        var title_arr = $(arr[1]).attr('title').split(',');
+        var resultArr = [];
+        
+        msg = arr[0];
+        for(var i = 0; i < title_arr.length; i++) {
+          var splitArr = String(title_arr[i]).split('/');
+          var template = $('<a class="filename">');
+          
+          if(splitArr.length > 1) {
+            var title = '';
+            var scrollto = '';
+            splitArr.forEach(function(value, index) {
+              
+              if(index != splitArr.length -1) {
+                title +=$.trim(value)+'%2F';
+              } else {
+                scrollto = value;
+              }
+              
+            });
+            
+            title = title.substr(0,title.length -3); 
+
+            template.attr({href: '/owncloud/index.php/apps/files?dir=%2F'+title+'&scrollto='+scrollto, title: t('activity', 'in ') + title.replace('%2F','/'), class: 'filename has-tooltip'});
+            template.text(scrollto);
+
+          } else {
+           
+            template.attr({href: '/owncloud/index.php/apps/files?dir=%2F&scrollto='+title_arr[i]});
+            template.text(title_arr[i]);
+
+          }
+          msg += (i === title_arr.length - 1 ? t('activity', ' and ') : ', ') + template.prop('outerHTML'); 
+        
+        }
+      }
+      return msg;
+
+    },
 
 		addActivity: function($activity) {
-      var readableDayTimestamp = String($activity.readableDateTimestamp).split(" ")[1];
-      //console.dir(readableDayTimestamp[1]);
-			var $content = ''
+      var $content = ''
 				+ '<div class="box">' + "\n"
 				+ '	<div class="messagecontainer">' + "\n"
 
@@ -186,12 +203,12 @@ $(function(){
 
 				+ '		<div class="activitysubject">' + "\n"
 				+ (($activity.link) ? '			<a href="' + $activity.link + '">' + "\n" : '')
-				+ '			' + $activity.subjectformatted.markup.trimmed + "\n"
+				+ '			' + this.activityMsgHandler($activity.subjectformatted.markup.trimmed) + "\n"
 				+ (($activity.link) ? '			</a>' + "\n" : '')
 				+ '		</div>' + "\n"
 
 				+'		<span class="activitytime">' + "\n"
-				+ '			' + escapeHTML(readableDayTimestamp) + "\n"
+				+ '			' + escapeHTML($activity.readableDateTimestamp) + "\n"
 				+'		</span>' + "\n";
 
 			if ($activity.message) {
@@ -200,14 +217,24 @@ $(function(){
 					+'</div>' + "\n";
 			}
 
-			
-
+    /*  
+			if ($activity.previews && $activity.previews.length) {
+				$content += '<br />';
+				for (var i = 0; i < $activity.previews.length; i++) {
+					var $preview = $activity.previews[i];
+					$content += (($preview.link) ? '<a href="' + $preview.link + '">' + "\n" : '')
+						+ '<img class="preview' + (($preview.isMimeTypeIcon) ? ' preview-mimetype-icon' : '') + '" src="' + $preview.source + '" alt=""/>' + "\n"
+						+ (($preview.link) ? '</a>' + "\n" : '')
+				}
+			}
+    */
 			$content += '	</div>' + "\n"
 				+'</div>';
 
 			$content = $($content);
 			OCActivity.InfinitScrolling.processElements($content);
 			this.lastDateGroup.append($content);
+
 		},
 
 		processElements: function (parentElement) {
@@ -251,45 +278,5 @@ $(function(){
 	$('#rssurl').on('click', function () {
 		$('#rssurl').select();
 	});
-
-  $('.app-activity').delegate('.showORhide_activity','click', function() {
-    $(this).closest('.activity-section').find('.showORhide_activity').show();
-    
-    if($(this).data('value') === 'show') {
-
-      $(this).closest('.activity-section').find('.box:hidden').each(function(index) {
-        
-        index <= 10 && $(this).show();
-      
-      });
-
-      $(this).closest('.activity-section').find('.showORhide_activity').length < 2 &&
-        $(this).after($('<button class="showORhide_activity" data-value="hide">').text(t('activity','hide more activity data')));
-
-      if(!$(this).closest('.activity-section').find('.box:hidden').length) {
-        
-        $(this).hide();
-      
-      }
-    } else {
-      console.dir(111);
-      var visibleBox = $(this).closest('.activity-section').find('.box:visible');
-
-      if(visibleBox.length > 10) {
-        for(var i = 1; i<= 10 ; i++) {
-          $(visibleBox[visibleBox.length - i]).hide();
-          if(visibleBox.length - i === 10) break;
-        }
-      }
-      
-
-      if($(this).closest('.activity-section').find('.box:visible').length <= 10) {
-        $(this).hide();
-
-      }
-    }
-  
-  });
-
 });
 
