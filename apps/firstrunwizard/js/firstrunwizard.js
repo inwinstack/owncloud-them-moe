@@ -5,8 +5,8 @@ function showfirstrunwizard(){
 		opacity:0.4, 
 		transition:"elastic", 
 		speed:100, 
-		width:"70%", 
-		height:"70%", 
+		width:"60%", 
+		height:"50%", 
 		href: OC.filePath('firstrunwizard', '', 'wizard.php'),
 		onComplete : function(){
 			if (!SVGSupport()) {
@@ -52,3 +52,24 @@ $('#acceptWizard').live('click', function () {
 $('#notAcceptWizard').live('click', function () {
               window.open(OC.getProtocol()+ "://" + OC.getHost() + '/denined.php',"_self");
 });
+
+
+$('#approveCheck').live('click', function () {
+    if ($(":checkbox:checked").length == 1 ){
+	$('#acceptWizard').css({
+	  			  "background": "#18A6C4",
+	  			  "color": "#fff"});
+	//$('#acceptWizard').addClass("test");
+	$("#acceptWizard").removeAttr("disabled");
+	  		
+    }
+    else{
+        $('#acceptWizard').css({
+                                  "background": "",
+                                  "color": ""});
+	$("#acceptWizard").attr("disabled","disabled");
+	//$('#acceptWizard').removeClass("test");
+    }
+});
+
+
