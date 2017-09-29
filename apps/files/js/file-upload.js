@@ -419,7 +419,7 @@ OC.Upload = {
 								});
 							}
 						};
-
+                                                /*
 						if (OC.currentUser == null) {
 							OC.dialogs.prompt(					
 								'Rename anoymous name?',
@@ -433,10 +433,10 @@ OC.Upload = {
 								false
 							);
 						}
-
-						else {
+                                                */
+						//else {
 							OC.Upload.checkExistingFiles(selection, callbacks);
-						}
+						//}
 					}
 
 					return true; // continue adding files
