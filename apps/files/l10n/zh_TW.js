@@ -123,6 +123,7 @@ OC.L10N.register(
     "Force Delete": "永久刪除",
     "All Activities" : "所有活動",
     "Error deleting file."     : "無法刪除檔案",
-    "Error renaming file."     : "無法重新命名檔案"
+    "Error renaming file."     : "無法重新命名檔案",
+    "Renaming file successed." : "成功重新命名檔案"
 },
 "nplurals=1; plural=0;");

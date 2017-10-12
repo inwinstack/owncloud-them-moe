@@ -1796,7 +1796,7 @@
 								}
 								else {
 									fileInfo = result.data;
-                                                                        OC.Notification.showTemporary(t('files', 'Error renaming file.'));
+                                                                        OC.Notification.showTemporary(t('files', 'Renaming file successed.'));
 								}
 								// reinsert row
 								self.files.splice(tr.index(), 1);
