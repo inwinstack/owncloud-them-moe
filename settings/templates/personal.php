@@ -6,6 +6,8 @@
 /** @var $_ array */
 /** @var $_['urlGenerator'] */
 OC_Util::addScript('settings','changeliorder');
+OC_Util::addScript('settings','d3.min');
+OC_Util::addScript('settings','drawcircle');
 ?>
 
 <div id="app-navigation">
@@ -42,6 +44,7 @@ OC_Util::addScript('settings','changeliorder');
 <div id="quota-stats" class="section" style="padding: 30px 30px 0;margin-bottom: -15px;">
     <h2><?php p($l->t('Quota Stats')); ?></h2>
 </div>
+<div id="chart" class="chart-container" style="padding:25px"></div>
 
 <?php
 $storageinfo = \OC_Helper::getStorageInfo('/');
@@ -55,12 +58,11 @@ $usage = \OC_Helper::humanFileSize($storageinfo['used'] + $version_size + $trash
 $used = $storageinfo['used'] + $version_size + $trash_size;
 $files_used = number_format($storageinfo['used']/$storageinfo['total']*100,2);
 $total_percent = ($total_percent == 0.00 && $used > 0) ? 0.01 : $total_percent;
-$files_used = ($files_used == 0.00 && $storageinfo['used'] > 0) ? 0.01 : $files_used
-
+$files_used = ($files_used == 0.00 && $storageinfo['used'] > 0) ? 0.01 : $files_used;
+$free = \OC_Helper::humanFileSize($storageinfo['total']-$storageinfo['used']);
 ?>
 
-
-<div id="quota" class="section">
+<div id="quota" class="section" style="display:none">
 	<div  class="progress" style="width:<?php p($total_percent);?>%"
 		<?php if($total_percent > 80): ?> class="quota-warning" <?php endif; ?>>
             <p id="quotatext">&emsp;
@@ -70,8 +72,22 @@ $files_used = ($files_used == 0.00 && $storageinfo['used'] > 0) ? 0.01 : $files_
 
 $trash_percent  = ($trashbin == 0.00 && $trash_size > 0) ? 0.01 : $trashbin; 
 $versions_percent  = ($versions == 0.00 && $version_size > 0) ? 0.01 : $versions; 
-?>
 
+?>
+<div id="getQuotaInfo"
+data-total="<?php p($_['total_space']);?>"
+data-totalpercent="<?php p($total_percent);?>"
+data-files="<?php p($usage);?>" 
+data-filespercent="<?php p($files_used);?>"
+data-trash="<?php p(OC_Helper::humanFileSize($trash_size));?>"
+data-trashpercent="<?php p($trashbin);?>" 
+data-versions="<?php p(OC_Helper::humanFileSize($version_size));?>"
+data-versionpercent="<?php p($versions);?>" 
+data-free="<?php p($free);?>"
+data-freepercent="<?php p(100 - $total_percent);?>"
+data-used="<?php p($usage);?>"
+>
+</div>
                 <?php print_unescaped($l->t("Total space is <strong>%s</strong>. You have used <strong>%s(%s)</strong> [files used <strong>%s(%s)</strong> / trashbin used <strong>%s(%s)</strong> / versions used <strong>%s(%s)</storng>]",array($_['total_space'], $usage, $total_percent.'%', $_['usage'], $files_used.'%', OC_Helper::humanFileSize($trash_size), $trashbin.'%', OC_Helper::humanFileSize($version_size), $versions.'%') ) );?>
             </p>
 	</div>
