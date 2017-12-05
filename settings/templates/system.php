@@ -54,6 +54,25 @@ $clients = array(
                     <img class="client-store" src="<?php print_unescaped(image_path('settings', 'Android App Download.jpg')); ?>">
                 </div>
             </div>
+
+            <div class="margin-bottom">
+                <span class="client-text">教育訓練講義</span>
+                <table class="bordered doc-download">
+                    <tr>
+                        <td><a href="https://storage.edu.tw/雲端儲存服務教育訓練講義_教材版_v2.pdf" target="_blank"><img class="download-icon" src="<?php print_unescaped(image_path('settings', 'downloads-icon.png')); ?>"></a></td>
+                        <td class="download_content">雲端儲存服務教育訓練講義_教材版_v2.pdf</td>
+                    </tr>
+                    <tr>
+                        <td><a href="https://storage.edu.tw/雲端儲存服務教育訓練講義_教材版_v2.pptx"><img class="download-icon" src="<?php print_unescaped(image_path('settings', 'downloads-icon.png')); ?>"></a></td>
+                        <td>雲端儲存服務教育訓練講義_教材版_v2.pptx</td>
+                    </tr>
+                    <tr>
+                        <td><a href="https://storage.edu.tw/學生彩印小冊.pdf" target="_blank"><img class="download-icon" src="<?php print_unescaped(image_path('settings', 'downloads-icon.png')); ?>"></a></td>
+                        <td>學生彩印小冊.pdf</td>
+                    </tr>
+                 </table>
+            </div>
+            
         </div>
     </div>
 </div>

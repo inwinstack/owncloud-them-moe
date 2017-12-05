@@ -82,3 +82,26 @@ table.grid th {
 .margin-bottom {
     margin-bottom: 10px;
 }
+
+table.doc-download{
+    *border-collapse: collapse; /* IE7 and lower */
+    border-spacing: 0;
+    width: 500px;
+    margin-left: 10%;
+}
+
+.bordered tr:hover {
+    background: white;
+}
+
+.bordered td, .bordered th {
+    padding: 10px;
+    text-align: left;
+}
+.download-icon {
+    width: 30px;
+    height: 30px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
