@@ -45,7 +45,7 @@
         <footer role="contentinfo">
             <div class="footer-img"></div>
             <div style="display: inline-block">
-                請使用教育體系 OpenID 帳號進行登入<br>
+                <!--請使用教育體系 OpenID 帳號進行登入<br>-->
             Copyright © Ministry of Education. All rigths reserved.
             </div>
         </footer>
