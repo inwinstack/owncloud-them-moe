@@ -7,11 +7,21 @@ body {
 }
 
 #body-login form {
-  margin: 0px auto 32px;
+  margin: 0px auto 15px;
 }
 
 #body-login #header {
-  padding-top: 60px;
+  padding-top: 10%;
+}
+
+#body-login .wrapper {
+   min-height: 100%;
+   margin: 0 auto -50px;
+   width: 300px;
+}
+
+#body-login footer, #body-login .push {
+   height: 5%;
 }
 
 .searchbox input[type="search"] {
@@ -70,6 +80,20 @@ body {
 
 #other-login input[type="button"].mail-edu:hover {
   background: #ffe037;
+  border-color: #ddd;
+  color: #111;
+}
+
+#other-login input[type="button"].learning {
+  background: #ff84a0;
+  color: #333;
+  font-size: 13px;
+  font-weight: 600;
+  padding: 5px;
+  width: 95%;
+}
+#other-login input[type="button"].learning:hover {
+  background: #ffb5c6;
   border-color: #ddd;
   color: #111;
 }
